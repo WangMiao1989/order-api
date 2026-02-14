@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wm.repository.CategoryRepository">
+    <select id="findAllCategorys" resultType="com.wm.entity.CategoryEntity">
+        SELECT
+            id
+            , name
+            , description
+            , icon
+        FROM
+            public.m_category
+        ORDER BY
+            display_order
+    </select>
+</mapper>
