@@ -12,7 +12,8 @@
             , image
             , tags 
         FROM
-            public.m_category
+            public.m_dish md
+            left join t_discount td on md.id = td.dish_id and now() between td.effective_start_date and td.effective_end_date
         ORDER BY
             display_order
     </select>
