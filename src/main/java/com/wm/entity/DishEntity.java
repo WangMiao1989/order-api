@@ -16,7 +16,7 @@ public class DishEntity {
 	private Long categoryId;
 	private String description;
 	private BigDecimal originalPrice;
-	private BigDecimal finalPrice;
+	private BigDecimal price;
 	private byte[] image;
 	private List<String> tags;
 }

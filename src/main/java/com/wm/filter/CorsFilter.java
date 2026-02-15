@@ -28,7 +28,7 @@ public class CorsFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
 
         // 设置 CORS 响应头
-        resp.setHeader("Access-Control-Allow-Origin", "http://localhost:3000"); // 前端地址
+        resp.setHeader("Access-Control-Allow-Origin", "*"); // 前端地址
         resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
         resp.setHeader("Access-Control-Allow-Credentials", "true");

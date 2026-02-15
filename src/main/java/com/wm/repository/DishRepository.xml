@@ -8,7 +8,7 @@
             , description
             , category_id
             , price as original_price
-            , price * coalesce(td.percent, 1) final_price
+            , price * coalesce(td.percent, 1) price
             , image
             , tags 
         FROM
