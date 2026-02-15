@@ -1,0 +1,247 @@
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+*.log
+*.logs
+*.lock
+*.iml
+*.iws
+*.ipr
+*.nar
+*.db
+*.DS_Store
+*.sw?
+*~
+
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+### Gradle ###
+.gradle/
+build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+.idea_modules/
+atlassian-ide-plugin.xml
+
+### Eclipse ###
+.project
+.classpath
+.settings/
+bin/
+*.prefs
+*.tmp
+*.bak
+*.orig
+.loadpath
+.factorypath
+.springBeans
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+### VS Code ###
+.vscode/
+.history/
+*.code-workspace
+
+### Spring Boot ###
+**/spring-boot-devtools.properties
+**/spring-boot-devtools.yaml
+**/spring-boot-devtools.yml
+*.springBeans
+
+### Application Properties ###
+*.properties
+*.yml
+*.yaml
+!application.properties
+!application.yml
+!application.yaml
+!application-dev.properties
+!application-dev.yml
+!application-prod.properties
+!application-prod.yml
+!application-test.properties
+!application-test.yml
+application-local.properties
+application-local.yml
+
+### Environment Variables ###
+.env
+.env.local
+.env.*.local
+*.p12
+*.pfx
+*.keystore
+*.jks
+
+### Logs ###
+logs/
+*.log
+*.out
+*.stackdump
+spring-boot-logging.log
+
+### Database ###
+*.h2.db
+*.mv.db
+*.db
+*.sqlite
+*.sqlite3
+
+### Temp files ###
+tmp/
+temp/
+*.tmp
+*.temp
+*.cache
+*.pid
+*.seed
+*.pid.lock
+
+### Build ###
+/build/
+/target/
+/out/
+/dist/
+/classes/
+/*.zip
+/*.tar.gz
+/*.rar
+
+### Test Coverage ###
+.coverage
+.coverage.*
+.happo.js
+htmlcov/
+coverage/
+.coverage.*
+*.lcov
+coverage.xml
+*.coverage
+.history/
+test-output/
+
+### IDE ###
+.idea/
+*.iml
+*.iws
+*.ipr
+.settings/
+.classpath
+.project
+.factorypath
+.springBeans
+.vscode/
+*.code-workspace
+.metadata
+bin/
+build/
+**/.settings/
+**/.classpath
+**/.project
+
+### OS ###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.lnk
+desktop.ini
+$RECYCLE.BIN/
+
+### Log Files ###
+**/logs/
+**/log/
+**/*.log
+**/*.stacktrace
+**/hs_err_pid*
+
+### Application Specific ###
+**/application-local.*
+**/application-dev.*
+**/application-test.*
+**/application-prod.*
+!application.yml
+!application.properties
+**/rebel.xml
+**/rebel-remote.xml
+
+### Maven Wrapper ###
+.mvn/wrapper/maven-wrapper.properties
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### Gradle Wrapper ###
+gradle/wrapper/gradle-wrapper.properties
+!gradle-wrapper.jar
+
+### Docker ###
+docker-compose.override.yml
+Dockerfile
+*.dockerenv
+.dockerignore
+
+### Kubernetes ###
+*.kubeconfig
+helm/charts/
+helm/repositories/
+
+### Secrets ###
+**/secrets/
+**/secret/
+**/keys/
+**/key/
+**/certs/
+**/cert/
+*.pem
+*.key
+*.crt
+*.csr
+*.p12
+*.jks
+*.keystore
+
+### Backup files ###
+*.bak
+*.backup
+*.orig
+*.old
+*~
+
+### Package Managers ###
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
