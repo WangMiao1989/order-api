@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wm.entity.DishEntity;
-import com.wm.repository.DishRepository;
+import com.wm.mapper.DishRepository;
 import com.wm.service.DishService;
 
 @Service

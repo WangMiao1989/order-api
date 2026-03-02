@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wm.responseDto.DishRetrieveResponse;
+import com.wm.entity.DishEntity;
 import com.wm.service.DishService;
 
 @RestController
@@ -17,9 +17,7 @@ public class DishController {
 	private DishService dishService;
 	
 	@RequestMapping("/retrieve")
-	public DishRetrieveResponse dishRetrieve() {
-		DishRetrieveResponse response = new DishRetrieveResponse();
-		response.setDishList(dishService.dishRetrieve());
-		return response;
+	public List<DishEntity> dishRetrieve() {
+		return dishService.dishRetrieve();
 	}
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wm.entity.CategoryEntity;
-import com.wm.repository.CategoryRepository;
+import com.wm.mapper.CategoryRepository;
 import com.wm.service.CategoryService;
 
 @Service

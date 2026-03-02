@@ -27,4 +27,11 @@ public class GlobalExceptionHandler {
         log.error("系统异常: {}", e.getMessage(), e);
         return GlobalResponse.globalError(HttpStatusCode.INTERNAL_ERROR, null,e.getMessage());
     }
+    
+    // 处理所有其他异常
+    @ExceptionHandler(Exception.class)
+    public GlobalResponse<Void> handleException(Exception e){
+        log.error("系统异常: {}", e.getMessage(), e);
+        return GlobalResponse.globalError(HttpStatusCode.INTERNAL_ERROR, null, "系统异常");
+    }
 }

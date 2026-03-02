@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wm.responseDto.CategoryRetrieveResponse;
+import com.wm.entity.CategoryEntity;
 import com.wm.service.CategoryService;
 
 @RestController
@@ -17,9 +17,7 @@ public class CategoryController {
 	private CategoryService categoryService;
 	
 	@RequestMapping("/retrieve")
-	public CategoryRetrieveResponse dishRetrieve() {
-		CategoryRetrieveResponse response = new CategoryRetrieveResponse();
-		response.setCategoryList(categoryService.categoryRetrieve());
-		return response;
+	public List<CategoryEntity> dishRetrieve() {
+		return categoryService.categoryRetrieve();
 	}
 }

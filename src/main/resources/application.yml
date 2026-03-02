@@ -37,7 +37,7 @@ logging:
 # MyBatis 配置
 mybatis:
   # mapper XML文件位置
-  mapper-locations: classpath:repository/*.xml
+  mapper-locations: classpath:mapper/*.xml
   # 实体类包路径
   type-aliases-package: com.wm.entity
   # 驼峰命名转换

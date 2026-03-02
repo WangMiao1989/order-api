@@ -1,12 +1,12 @@
-package com.wm.repository;
+package com.wm.mapper;
 
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.annotations.Mapper;
 
 import com.wm.entity.CategoryEntity;
 
-@Repository
+@Mapper
 public interface CategoryRepository {
 	public List<CategoryEntity> findAllCategorys();
 }
