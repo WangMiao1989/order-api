@@ -17,6 +17,6 @@ public class OrderController {
 	
 	@RequestMapping("/update")
 	public void updateOrder(@RequestBody OrderUpdateRequestForm request) {
-		orderService.updateOrderInfo(request);
+		orderService.orderInfoUpdate(request);
 	}
 }

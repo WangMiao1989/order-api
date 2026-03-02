@@ -4,5 +4,5 @@ import com.wm.requestDto.OrderUpdateRequestForm;
 
 public interface OrderService {
 	
-	public void updateOrderInfo(OrderUpdateRequestForm orderForm);
+	public void orderInfoUpdate(OrderUpdateRequestForm orderForm);
 }

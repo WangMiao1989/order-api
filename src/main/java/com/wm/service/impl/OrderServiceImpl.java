@@ -19,7 +19,7 @@ public class OrderServiceImpl implements OrderService{
 	@Autowired
 	OrderRepository orderRepository;
 	
-	public void updateOrderInfo(OrderUpdateRequestForm orderForm) {
+	public void orderInfoUpdate(OrderUpdateRequestForm orderForm) {
 		Long tableId = orderForm.getTableId();
 		// table info 更新
 		if(Objects.isNull(tableId)) {

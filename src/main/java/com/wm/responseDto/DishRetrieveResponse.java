@@ -5,10 +5,8 @@ import java.util.List;
 import com.wm.entity.DishEntity;
 
 import lombok.Data;
-import lombok.Setter;
 
 @Data
-@Setter
 public class DishRetrieveResponse {
-	List<DishEntity> dishList;
+	private List<DishEntity> dishList;
 }
