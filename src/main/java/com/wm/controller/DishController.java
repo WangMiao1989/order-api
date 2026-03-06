@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wm.entity.DishInfoEntity;
 import com.wm.requestDto.DishDeleteRequestForm;
 import com.wm.requestDto.DishUpdateRequestForm;
-import com.wm.requestDto.TableDetailRetrieveRequestForm;
 import com.wm.service.DishService;
 
 @RestController

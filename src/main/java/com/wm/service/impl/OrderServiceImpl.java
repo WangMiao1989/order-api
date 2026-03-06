@@ -1,15 +1,20 @@
 package com.wm.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wm.entity.OrderInfoEntity;
-import com.wm.entity.TableInfoEntity;
+import com.wm.entity.OrderEntity;
+import com.wm.entity.TableEntity;
 import com.wm.mapper.OrderRepository;
+import com.wm.mapper.TableRepository;
 import com.wm.requestDto.OrderUpdateRequestForm;
+import com.wm.requestDto.TableNoRequestForm;
 import com.wm.service.OrderService;
 
 @Service
@@ -17,24 +22,34 @@ import com.wm.service.OrderService;
 public class OrderServiceImpl implements OrderService{
 	
 	@Autowired
+	TableRepository tableRepository;
+	
+	@Autowired
 	OrderRepository orderRepository;
 	
-	public void orderInfoUpdate(OrderUpdateRequestForm orderForm) {
-		Long tableId = orderForm.getTableId();
-		// table info 更新
-		if(Objects.isNull(tableId)) {
-			TableInfoEntity tableInfo = new TableInfoEntity();
-			tableInfo.setTableNo(orderForm.getTableNo());
-			tableInfo.setCustomerCnt(orderForm.getCustomerCnt());
-			tableInfo.setStartTime(orderForm.getStartTime());
-			orderRepository.updateTableInfo(tableInfo);
-			tableId = tableInfo.getTableId();
-		} 
+	public void orderInfoUpdate(OrderUpdateRequestForm request) {
+		// table信息取得
+		TableEntity tableInfo =  tableRepository.selectTableInfo(request.getTableNo());
+		// table信息不存在的情况，保存
+		if(Objects.isNull(tableInfo)) {
+			tableInfo = new TableEntity();
+			BeanUtils.copyProperties(request, tableInfo);
+			tableRepository.updateTableInfo(tableInfo);
+		}
 		
 		// order info更新
-		OrderInfoEntity orderInfo= new OrderInfoEntity();
-		orderInfo.setTableId(tableId);
-		orderInfo.setOrderDetail(orderForm.getOrderDetail());
+		OrderEntity orderInfo= new OrderEntity();
+		orderInfo.setTableId(tableInfo.getTableId());
+		orderInfo.setOrderDetail(request.getOrderDetail());
 		orderRepository.updateOrderInfo(orderInfo);
+	}
+	
+	public List<OrderEntity> orderListRetrieve(TableNoRequestForm request) {
+		// table信息取得
+		TableEntity tableInfo =  tableRepository.selectTableInfo(request.getTableNo());
+		if(Objects.isNull(tableInfo)) {
+			return new ArrayList<>();
+		}
+		return orderRepository.selectOrderList(tableInfo.getTableId());
 	}
 }

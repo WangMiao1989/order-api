@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wm.mapper.OrderRepository">
-    <insert id="updateTableInfo" useGeneratedKeys="true" keyProperty="tableId" parameterType="com.wm.entity.TableInfoEntity">
-       Insert into public.t_table_info (
-       	table_no 
-       	,customer_cnt
-       	,start_time
-       	,create_user
-       	,update_user
-       ) values ( 
-       	#{tableNo}
-       	,#{customerCnt}
-       	,#{startTime}
-       	,#{createUser}
-       	,#{updateUser}
-       );
-    </insert>
-    
-    <insert id="updateOrderInfo" useGeneratedKeys="true" keyProperty="orderId" parameterType="com.wm.entity.OrderInfoEntity">
+<mapper namespace="com.wm.mapper.OrderRepository">    
+    <insert id="updateOrderInfo" useGeneratedKeys="true" keyProperty="orderId" parameterType="com.wm.entity.OrderEntity">
        Insert into public.t_order_info (
        	table_id, 
        	order_detail,
@@ -30,4 +14,21 @@
        	#{updateUser}
        );
     </insert>
+    
+    <select id="selectOrderList" resultType="com.wm.entity.OrderEntity">
+       SELECT
+       		order_id
+       		,table_id
+            ,order_detail
+            ,create_user
+            ,create_time
+            ,update_user
+            ,update_time
+        FROM
+            public.t_order_info
+        where
+        	table_id = #{tableId}
+        order by
+        	create_time desc
+    </select>
 </mapper>

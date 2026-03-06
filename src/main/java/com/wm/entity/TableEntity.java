@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class TableInfoEntity extends BaseEntity{
+public class TableEntity extends BaseEntity{
 	private Long tableId;
 	private String tableNo;
 	private Integer customerCnt;

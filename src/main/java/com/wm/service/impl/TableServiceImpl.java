@@ -1,6 +1,5 @@
 package com.wm.service.impl;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.BeanUtils;
@@ -8,10 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wm.entity.TableInfoEntity;
+import com.wm.entity.TableEntity;
 import com.wm.mapper.TableRepository;
-import com.wm.requestDto.OrderListRetrieveRequestForm;
-import com.wm.requestDto.TableDetailRetrieveRequestForm;
+import com.wm.requestDto.TableNoRequestForm;
 import com.wm.responseDto.TableDetailRetrieveResponse;
 import com.wm.service.TableService;
 
@@ -22,20 +20,15 @@ public class TableServiceImpl implements TableService{
 	@Autowired
 	TableRepository tableRepository;
 	
-	public TableDetailRetrieveResponse tableDetailRetrieve(TableDetailRetrieveRequestForm request) {
+	public TableDetailRetrieveResponse tableDetailRetrieve(TableNoRequestForm request) {
 		TableDetailRetrieveResponse response = new TableDetailRetrieveResponse();
 		
 		// table信息取得
-		TableInfoEntity tableInfo =  tableRepository.selectTableInfo(request.getTableNo());
+		TableEntity tableInfo =  tableRepository.selectTableInfo(request.getTableNo());
 		if(!Objects.isNull(tableInfo)) {
 			BeanUtils.copyProperties(tableInfo, response);
 		}
 
 		return response;
-	}
-	
-	// order信息取得
-	public List<Object> orderListRetrieve(OrderListRetrieveRequestForm request){
-		return tableRepository.selectOrderList(request.getTableId());
 	}
 }

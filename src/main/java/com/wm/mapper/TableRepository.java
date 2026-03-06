@@ -1,14 +1,12 @@
 package com.wm.mapper;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 
-import com.wm.entity.TableInfoEntity;
+import com.wm.entity.TableEntity;
 
 @Mapper
 public interface TableRepository {
-	public TableInfoEntity selectTableInfo(String tableNo);
+	public int updateTableInfo(TableEntity tableInfo);
 	
-	public List<Object> selectOrderList(Long tableId);
+	public TableEntity selectTableInfo(String tableNo);
 }

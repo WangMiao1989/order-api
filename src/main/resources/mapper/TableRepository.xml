@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wm.mapper.TableRepository">
-    <select id="selectTableInfo" resultType="com.wm.entity.TableInfoEntity">
+    <insert id="updateTableInfo" useGeneratedKeys="true" keyProperty="tableId" parameterType="com.wm.entity.TableEntity">
+       Insert into public.t_table_info (
+       	table_no 
+       	,customer_cnt
+       	,start_time
+       	,create_user
+       	,update_user
+       ) values ( 
+       	#{tableNo}
+       	,#{customerCnt}
+       	,#{startTime}
+       	,#{createUser}
+       	,#{updateUser}
+       );
+    </insert>
+    
+    <select id="selectTableInfo" resultType="com.wm.entity.TableEntity">
        SELECT
             table_id
             ,table_no
             ,customer_cnt
             ,start_time
             ,end_time
+            ,create_user
+            ,create_time
+       		,update_user
+       		,update_time
         FROM
             public.t_table_info
         where
@@ -15,14 +35,5 @@
         	and end_time is null
         order by update_time desc
         limit 1
-    </select>
-    
-    <select id="selectOrderList" resultType="Object">
-       SELECT
-            order_detail
-        FROM
-            public.t_order_info
-        where
-        	table_id = #{tableId}
     </select>
 </mapper>

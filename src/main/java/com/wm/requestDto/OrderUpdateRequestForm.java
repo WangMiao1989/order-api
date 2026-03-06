@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class OrderUpdateRequestForm {
-	private Long tableId;
 	private String tableNo;
 	private Integer customerCnt;
 	private LocalDateTime startTime;
