@@ -1,20 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wm.mapper.DishRepository">
-    <select id="findAllDishes" resultType="com.wm.entity.DishEntity">
+    <select id="selectAllDishes" resultType="com.wm.entity.DishInfoEntity">
        SELECT
-            id
+            md.id as dish_id
             , name
             , description
             , category_id
             , price as original_price
-            , price * coalesce(td.percent, 1) price
+            , price * coalesce(td.rate, 1) as price
             , image
-            , tags 
+            , case when tda.id is null then false else true end has_discount
+            , tda.rate
+            , tda.start_date
+            , tda.end_date
         FROM
             public.m_dish md
-            left join t_discount td on md.id = td.dish_id and now() between td.effective_start_date and td.effective_end_date
+            left join t_discount td on md.id = td.dish_id and now() between td.start_date and td.end_date
+            left join t_discount tda on md.id = tda.dish_id
         ORDER BY
-            display_order
+            md.id
     </select>
+    
+    <insert id="insertDish" useGeneratedKeys="true" keyProperty="dishId" parameterType="com.wm.entity.DishEntity">
+    	insert into public.m_dish
+    		(name, description, category_id, price, image, display_order, create_user, create_time, update_user, update_time)
+    	values(
+    		#{name}, #{description}, #{categoryId}, #{price}, #{image}, #{displayOrder}, 'test', now(), 'test', now()
+    	)
+    </insert>
+    
+    <update id="updateDish" parameterType="com.wm.entity.DishEntity">
+    	update public.m_dish
+    		set
+	    		name = #{name}
+	    		,description = #{description}
+	    		,category_id = #{categoryId}
+	    		,price = #{price}
+	    		,image = #{image}
+	    		,display_order = #{displayOrder}
+	    		,update_user = 'test'
+	    		,update_time = now()
+	    where
+	    	id = #{dishId}
+    </update>
+    
+    <delete id="deleteDish" parameterType="Long">
+    	delete from public.m_dish where id = #{dishId}
+    </delete>
 </mapper>

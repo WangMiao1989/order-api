@@ -3,13 +3,13 @@
 <mapper namespace="com.wm.mapper.CategoryRepository">
     <select id="findAllCategorys" resultType="com.wm.entity.CategoryEntity">
         SELECT
-            id
+            id as category_id
             , name
             , description
             , icon
         FROM
             public.m_category
         ORDER BY
-            display_order
+            id
     </select>
 </mapper>

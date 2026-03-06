@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wm.mapper.DiscountRepository">
+    <select id="selectDiscountId" resultType="Long">
+        select
+            id
+        from
+            public.t_discount
+        where
+        	dish_id = #{dishId}
+    </select>
+    
+    <insert id="insertDiscount" useGeneratedKeys="true" keyProperty="discountId" parameterType="com.wm.entity.DiscountEntity">
+    	insert into public.t_discount
+    		(dish_id, rate, start_date, end_date, create_user, create_time, update_user, update_time)
+    	values(
+    		#{dishId}, #{rate}, #{startDate}, #{endDate}, 'test', now(), 'test', now()
+    	)
+    </insert>
+    
+    <update id="updateDiscount" parameterType="com.wm.entity.DiscountEntity">
+    	update public.t_discount
+    		set
+	    		rate = #{rate}
+	    		,start_date = #{startDate}
+	    		,end_date = #{endDate}
+	    		,update_user = 'test'
+	    		,update_time = now()
+	    where
+	    	id = #{id}
+    </update>
+    
+    <delete id="deleteDiscountByDishId" parameterType="Long">
+    	delete from public.t_discount where dish_id = #{dishId}
+    </delete>
+</mapper>
