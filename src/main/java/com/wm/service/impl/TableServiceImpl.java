@@ -1,5 +1,6 @@
 package com.wm.service.impl;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.BeanUtils;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wm.entity.TableEntity;
+import com.wm.entity.AllTableEntity;
 import com.wm.mapper.TableRepository;
 import com.wm.requestDto.TableNoRequestForm;
 import com.wm.responseDto.TableDetailRetrieveResponse;
@@ -30,5 +32,9 @@ public class TableServiceImpl implements TableService{
 		}
 
 		return response;
+	}
+	
+	public List<AllTableEntity> allTableRetrieve(){
+		return tableRepository.selectAllTable();
 	}
 }

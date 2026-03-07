@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wm.controller.SseController;
+import com.wm.entity.AllOrderEntity;
 import com.wm.entity.OrderEntity;
 import com.wm.entity.TableEntity;
 import com.wm.mapper.OrderRepository;
 import com.wm.mapper.TableRepository;
+import com.wm.requestDto.OrderServeUpdateRequestForm;
 import com.wm.requestDto.OrderUpdateRequestForm;
 import com.wm.requestDto.TableNoRequestForm;
 import com.wm.service.OrderService;
@@ -27,6 +30,9 @@ public class OrderServiceImpl implements OrderService{
 	@Autowired
 	OrderRepository orderRepository;
 	
+	@Autowired
+	SseController sseController;
+	
 	public void orderInfoUpdate(OrderUpdateRequestForm request) {
 		// table信息取得
 		TableEntity tableInfo =  tableRepository.selectTableInfo(request.getTableNo());
@@ -35,6 +41,9 @@ public class OrderServiceImpl implements OrderService{
 			tableInfo = new TableEntity();
 			BeanUtils.copyProperties(request, tableInfo);
 			tableRepository.updateTableInfo(tableInfo);
+			
+			// sse触发table更新
+			sseController.notifyTableUpdated();
 		}
 		
 		// order info更新
@@ -42,6 +51,9 @@ public class OrderServiceImpl implements OrderService{
 		orderInfo.setTableId(tableInfo.getTableId());
 		orderInfo.setOrderDetail(request.getOrderDetail());
 		orderRepository.updateOrderInfo(orderInfo);
+		
+		// sse触发order更新
+		sseController.notifyOrderUpdated();
 	}
 	
 	public List<OrderEntity> orderListRetrieve(TableNoRequestForm request) {
@@ -51,5 +63,13 @@ public class OrderServiceImpl implements OrderService{
 			return new ArrayList<>();
 		}
 		return orderRepository.selectOrderList(tableInfo.getTableId());
+	}
+	
+	public List<AllOrderEntity> allOrderRetrieve(){
+		return orderRepository.selectAllOrder();
+	}
+	
+	public void orderServeUpdate(OrderServeUpdateRequestForm request) {
+		orderRepository.updateOrderServe(request.getOrderId(), request.getDishId());
 	}
 }

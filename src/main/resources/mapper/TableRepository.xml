@@ -36,4 +36,19 @@
         order by update_time desc
         limit 1
     </select>
+    
+    <select id="selectAllTable" resultType="com.wm.entity.AllTableEntity">
+    	select
+		    mt.table_no
+		    ,mt.floor
+		    ,mt.type
+		    ,mt.capacity
+		    ,coalesce(tti.customer_cnt, 0) as  customer_cnt
+		    ,tti.start_time
+		from
+		    public.m_table mt
+		    left join public.t_table_info tti on mt.table_no = tti.table_no and tti.end_time is null
+		order by
+			mt.floor, mt.table_no
+    </select>
 </mapper>

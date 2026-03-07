@@ -31,4 +31,57 @@
         order by
         	create_time desc
     </select>
+    
+    <resultMap id="allOrderMap" type="com.wm.entity.AllOrderEntity">
+	    <id property="dishId" column="dish_id"/>
+	    <result property="name" column="name"/>
+	    <result property="totalQuantity" column="total_quantity"/>
+	    <collection property="tableQuantityList" ofType="com.wm.entity.TableQuantityEntity">
+	        <id property="orderId" column="order_id"/>
+	        <result property="tableNo" column="table_no"/>
+	        <result property="quantity" column="quantity"/>
+	        <result property="orderTime" column="order_time"/>
+	    </collection>
+	</resultMap>
+	
+    <select id="selectAllOrder" resultMap="allOrderMap">
+       select 
+		    dish_id
+		    ,name
+		    ,sum(quantity::numeric) over(partition by dish_id) as total_quantity
+		    ,order_id
+		    ,table_no
+		    ,quantity
+		    ,order_time
+		from
+		    public.v_orders
+		where
+		    is_served = 'false'
+		order by
+		    dish_id, order_time
+    </select>
+    
+    <update id="updateOrderServe">
+    	update public.t_order_info
+    	set
+    		order_detail = (
+    			select 
+    				jsonb_agg(
+    					case 
+    						when elem->>'dishId' = #{dishId}::text 
+    						then elem || jsonb_build_object(
+    							'isServed', true,
+    							'servedTime', to_char(now(), 'YYYY-MM-DD HH24:MI:SS')
+    						) 
+    						else elem
+    					end
+    					order by idx
+    				)
+    			from
+    				jsonb_array_elements(order_detail) with ordinality as t(elem, idx)
+    		),
+    		update_time = now()
+    	where
+    		order_id = #{orderId}
+    </update>
 </mapper>
