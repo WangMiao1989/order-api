@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wm.controller.SseController;
 import com.wm.entity.AllOrderEntity;
+import com.wm.entity.OrderDetailEntity;
 import com.wm.entity.OrderEntity;
 import com.wm.entity.TableEntity;
 import com.wm.mapper.OrderRepository;
@@ -56,13 +57,8 @@ public class OrderServiceImpl implements OrderService{
 		sseController.notifyOrderUpdated();
 	}
 	
-	public List<OrderEntity> orderListRetrieve(TableNoRequestForm request) {
-		// table信息取得
-		TableEntity tableInfo =  tableRepository.selectTableInfo(request.getTableNo());
-		if(Objects.isNull(tableInfo)) {
-			return new ArrayList<>();
-		}
-		return orderRepository.selectOrderList(tableInfo.getTableId());
+	public List<OrderDetailEntity> orderListRetrieve(TableNoRequestForm request) {
+		return orderRepository.selectOrderList(request.getTableNo());
 	}
 	
 	public List<AllOrderEntity> allOrderRetrieve(){

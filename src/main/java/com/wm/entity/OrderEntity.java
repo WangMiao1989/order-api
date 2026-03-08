@@ -1,5 +1,7 @@
 package com.wm.entity;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data

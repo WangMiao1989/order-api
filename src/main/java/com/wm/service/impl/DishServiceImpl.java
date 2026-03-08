@@ -40,11 +40,7 @@ public class DishServiceImpl implements DishService{
 		BeanUtils.copyProperties(request, dish);
 		
 		// 图片处理
-		String base64Data = request.getImgUrl();
-		if (base64Data.contains(",")) {
-            base64Data = base64Data.split(",")[1];
-        }
-		byte[] image = Base64.getDecoder().decode(base64Data);
+		byte[] image = Base64.getDecoder().decode(request.getImage());
 		dish.setImage(image);
 		
 		// 菜品保存

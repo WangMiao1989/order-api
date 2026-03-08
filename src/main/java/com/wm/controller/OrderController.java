@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wm.entity.AllOrderEntity;
-import com.wm.entity.OrderEntity;
+import com.wm.entity.OrderDetailEntity;
 import com.wm.requestDto.OrderServeUpdateRequestForm;
 import com.wm.requestDto.OrderUpdateRequestForm;
 import com.wm.requestDto.TableNoRequestForm;
@@ -27,7 +27,7 @@ public class OrderController {
 	}
 	
 	@RequestMapping("/retrieve")
-	public List<OrderEntity> orderListRetrieve(@RequestBody TableNoRequestForm request) {
+	public List<OrderDetailEntity> orderListRetrieve(@RequestBody TableNoRequestForm request) {
 		return orderService.orderListRetrieve(request);
 	}
 	

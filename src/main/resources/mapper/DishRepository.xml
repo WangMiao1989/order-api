@@ -16,7 +16,7 @@
             , tda.end_date
         FROM
             public.m_dish md
-            left join t_discount td on md.id = td.dish_id and now() between td.start_date and td.end_date
+            left join t_discount td on md.id = td.dish_id and now()::date between td.start_date and td.end_date
             left join t_discount tda on md.id = tda.dish_id
         ORDER BY
             md.id

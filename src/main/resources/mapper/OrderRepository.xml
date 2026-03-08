@@ -15,21 +15,38 @@
        );
     </insert>
     
-    <select id="selectOrderList" resultType="com.wm.entity.OrderEntity">
+    <resultMap id="orderMap" type="com.wm.entity.OrderDetailEntity">
+	    <id property="orderId" column="order_id"/>
+	    <result property="orderTime" column="order_time"/>
+	    <result property="isPaid" column="is_paid"/>
+	    <result property="paidTime" column="paid_time"/>
+	    <collection property="dishList" ofType="com.wm.entity.OrderDishEntity">
+	        <id property="dishId" column="dish_id"/>
+	        <result property="name" column="name"/>
+	        <result property="price" column="price"/>
+	        <result property="quantity" column="quantity"/>
+	        <result property="isServed" column="is_served"/>
+	        <result property="servedTime" column="served_time"/>
+	    </collection>
+	</resultMap>
+    <select id="selectOrderList" resultMap="orderMap">
        SELECT
        		order_id
-       		,table_id
-            ,order_detail
-            ,create_user
-            ,create_time
-            ,update_user
-            ,update_time
+       		,order_time
+            ,is_paid
+            ,paid_time
+            ,dish_id
+            ,name
+            ,price
+            ,quantity
+            ,is_served
+            ,served_time
         FROM
-            public.t_order_info
+            public.v_orders
         where
-        	table_id = #{tableId}
+        	table_no= #{tableNo}
         order by
-        	create_time desc
+        	order_time desc, dish_id
     </select>
     
     <resultMap id="allOrderMap" type="com.wm.entity.AllOrderEntity">
@@ -43,7 +60,6 @@
 	        <result property="orderTime" column="order_time"/>
 	    </collection>
 	</resultMap>
-	
     <select id="selectAllOrder" resultMap="allOrderMap">
        select 
 		    dish_id
