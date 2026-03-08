@@ -16,13 +16,6 @@ public class GlobalResponse<T> {
     private T data;
     private ErrorEntity error;
     
-    // 成功响应（无数据）
-    public static <T> GlobalResponse<T> success() {
-    	GlobalResponse<T> response = new GlobalResponse<>();
-        response.setStatus(HttpStatusCode.SUCCESS);
-        return response;
-    }
-    
     // 成功响应（有数据）
     public static <T> GlobalResponse<T> success(T data) {
     	GlobalResponse<T> response = new GlobalResponse<>();

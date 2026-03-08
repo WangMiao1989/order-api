@@ -24,13 +24,6 @@ public class GlobalResponseAdvice implements ResponseBodyAdvice<Object> {
                                  Class selectedConverterType,
                                  ServerHttpRequest request,
                                  ServerHttpResponse response) {
-        
-        // 如果是 void 方法
-        if (body == null) {
-            return GlobalResponse.success();
-        }
-        
-        // 包装成 ApiResponse
         return GlobalResponse.success(body);
     }
 }
