@@ -4,7 +4,6 @@ import lombok.Data;
 
 import java.util.ArrayList;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wm.constant.HttpStatusCode;
 
 @Data
