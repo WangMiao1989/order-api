@@ -11,9 +11,10 @@ public class DishInfoEntity {
 	private String name;
 	private Long categoryId;
 	private String description;
-	private BigDecimal originalPrice;
 	private BigDecimal price;
+	private BigDecimal currentPrice;
 	private byte[] image;
+	private Long tag;
 	private Boolean hasDiscount;
 	private BigDecimal rate;
 	private LocalDate startDate;

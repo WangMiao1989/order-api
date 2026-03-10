@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wm.entity.TableEntity;
+import com.wm.controller.SseController;
 import com.wm.entity.AllTableEntity;
 import com.wm.mapper.TableRepository;
 import com.wm.requestDto.TableNoRequestForm;
@@ -21,6 +22,9 @@ public class TableServiceImpl implements TableService{
 	
 	@Autowired
 	TableRepository tableRepository;
+	
+	@Autowired
+	SseController sseController;
 	
 	public TableDetailRetrieveResponse tableDetailRetrieve(TableNoRequestForm request) {
 		TableDetailRetrieveResponse response = new TableDetailRetrieveResponse();
@@ -36,5 +40,14 @@ public class TableServiceImpl implements TableService{
 	
 	public List<AllTableEntity> allTableRetrieve(){
 		return tableRepository.selectAllTable();
+	}
+	
+	public void tableFinish(TableNoRequestForm request) {
+		tableRepository.updateTableEndtime(request.getTableNo());
+		
+		// sse触发table更新
+		sseController.notifyTableUpdated();
+		// sse触发order更新
+		sseController.notifyOrderUpdated("[]");
 	}
 }

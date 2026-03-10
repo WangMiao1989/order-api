@@ -10,4 +10,6 @@ public interface TableService {
 	public TableDetailRetrieveResponse tableDetailRetrieve(TableNoRequestForm request);
 	
 	public List<AllTableEntity> allTableRetrieve();
+	
+	public void tableFinish(TableNoRequestForm request);
 }

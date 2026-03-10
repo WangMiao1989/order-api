@@ -100,4 +100,66 @@
     	where
     		order_id = #{orderId}
     </update>
+    
+    <select id="selectOtherDishCount" resultType="Int">
+    	select
+    		count(1)
+    	from
+    		public.v_orders
+    	where
+    		order_id = #{orderId}
+    		and dish_id != #{dishId}
+    </select>
+    
+    <update id="deleteOrderDish">
+    	update public.t_order_info
+    	set
+    		order_detail = (
+    			select 
+    				jsonb_agg(elem order by idx)
+    			from
+    				jsonb_array_elements(order_detail) with ordinality as t(elem, idx)
+    			where
+    				elem->>'dishId' != #{dishId}::text
+    		),
+    		update_time = now()
+    	where
+    		order_id = #{orderId}
+    </update>
+    
+    <delete id="deleteOrder">
+    	delete from public.t_order_info
+    	where
+    		order_id = #{orderId}
+    </delete>
+    
+    <update id="updateOrderDishQuantity">
+    	update public.t_order_info
+    	set
+    		order_detail = (
+    			select 
+    				jsonb_agg( 
+    					case when elem->>'dishId' = #{dishId}::text
+    					then 
+    						elem || jsonb_build_object('quantity', #{quantity})
+    					else
+    						elem
+    					end order by idx)
+    			from
+    				jsonb_array_elements(order_detail) with ordinality as t(elem, idx)
+    		),
+    		update_time = now()
+    	where
+    		order_id = #{orderId}
+    </update>
+    
+    <update id="updateOrderPay">
+    	update public.t_order_info
+    	set
+    		is_paid = true
+    		,paid_time = now()
+    	where
+    		order_id in 
+    		<foreach item="orderId" collection="orderIdList" open="(" close=")" separator="," >#{orderId}</foreach>
+    </update>
 </mapper>

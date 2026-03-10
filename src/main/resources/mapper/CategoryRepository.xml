@@ -4,6 +4,7 @@
     <select id="findAllCategorys" resultType="com.wm.entity.CategoryEntity">
         SELECT
             id as category_id
+            ,type
             , name
             , description
             , icon

@@ -14,4 +14,6 @@ public interface TableRepository {
 	public TableEntity selectTableInfo(String tableNo);
 	
 	public List<AllTableEntity> selectAllTable();
+	
+	public int updateTableEndtime(String tableNo);
 }

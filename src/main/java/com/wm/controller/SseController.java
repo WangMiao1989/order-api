@@ -32,12 +32,12 @@ public class SseController {
     }
 
     // order 更新触发
-    public void notifyOrderUpdated() {
+    public void notifyOrderUpdated(String order) {
         for (SseEmitter emitter : emitters) {
             try {
                 emitter.send(SseEmitter.event()
                         .name("order-updated")
-                        .data("update"));
+                        .data(order));
             } catch (IOException e) {
                 emitters.remove(emitter);
             }

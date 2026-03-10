@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.wm.entity.AllOrderEntity;
 import com.wm.entity.OrderDetailEntity;
-import com.wm.requestDto.OrderServeUpdateRequestForm;
+import com.wm.requestDto.OrderCheckoutRequestForm;
+import com.wm.requestDto.OrderDishQuantityRequestForm;
+import com.wm.requestDto.OrderDishRequestForm;
 import com.wm.requestDto.OrderUpdateRequestForm;
 import com.wm.requestDto.TableNoRequestForm;
 
@@ -16,5 +18,11 @@ public interface OrderService {
 	
 	public List<AllOrderEntity> allOrderRetrieve();
 	
-	public void orderServeUpdate(OrderServeUpdateRequestForm request);
+	public void orderServeUpdate(OrderDishRequestForm request);
+	
+	public void orderDishQuantityModify(OrderDishQuantityRequestForm request);
+	
+	public void orderDishDelete(OrderDishRequestForm request);
+	
+	public void orderCheckout(OrderCheckoutRequestForm request);
 }

@@ -17,4 +17,14 @@ public interface OrderRepository {
 	public List<AllOrderEntity> selectAllOrder();
 	
 	public int updateOrderServe(Long orderId, Long dishId);
+	
+	public int selectOtherDishCount(Long orderId, Long dishId);
+	
+	public int deleteOrder(Long orderId);
+	
+	public int deleteOrderDish(Long orderId, Long dishId);
+	
+	public int updateOrderDishQuantity(Long orderId, Long dishId, Integer quantity);
+	
+	public int updateOrderPay(List<Long> orderIdList);
 }

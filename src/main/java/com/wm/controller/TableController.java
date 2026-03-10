@@ -28,4 +28,9 @@ public class TableController {
 	public List<AllTableEntity> allTableRetrieve() {
 		return tableService.allTableRetrieve();
 	}
+	
+	@RequestMapping("/finish")
+	public void tableFinish(@RequestBody TableNoRequestForm request) {
+		tableService.tableFinish(request);
+	}
 }

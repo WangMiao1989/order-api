@@ -1,6 +1,7 @@
 create sequence category_id_seq;
 create table m_category(
     id bigint primary key default nextval('category_id_seq'),
+    type varchar(20),
     name varchar(50),
     description varchar(500),
     icon varchar(50),
@@ -17,9 +18,9 @@ create table m_dish(
     name varchar(50),
     description varchar(500),
     category_id bigint,
-    price varchar(50),
+    price numeric,
     image bytea,
-    tags varchar(100),
+    tag bigint,
     display_order integer,
     create_user varchar(100),
     create_time timestamp without time zone default now(),
@@ -59,6 +60,7 @@ create table t_order_info(
     table_id bigint not null,
     order_detail jsonb,
     is_paid boolean default false,
+    paid_time timestamp without time zone,
     create_user varchar(100),
     create_time timestamp without time zone default now(),
     update_user varchar(100),
@@ -95,12 +97,14 @@ CREATE OR REPLACE VIEW public.v_orders AS
     toi.order_id,
     toi.create_time AS order_time,
     toi.is_paid,
-    (jsonb_array_elements(toi.order_detail) ->> 'dishId'::text) AS dish_id,
+    toi.paid_time,
+    (jsonb_array_elements(toi.order_detail) ->> 'dishId'::text)::integer AS dish_id,
     (jsonb_array_elements(toi.order_detail) ->> 'name'::text) AS name,
     (jsonb_array_elements(toi.order_detail) ->> 'price'::text) AS price,
     (jsonb_array_elements(toi.order_detail) ->> 'quantity'::text) AS quantity,
     (jsonb_array_elements(toi.order_detail) ->> 'isServed'::text) AS is_served,
-    (jsonb_array_elements(toi.order_detail) ->> 'servedTime'::text)::timestamp without time zone AS served_time
+    ((jsonb_array_elements(toi.order_detail) ->> 'servedTime'::text))::timestamp without time zone AS served_time
    FROM (t_table_info tti
      LEFT JOIN t_order_info toi ON ((tti.table_id = toi.table_id)))
   WHERE (tti.end_time IS NULL);
+  

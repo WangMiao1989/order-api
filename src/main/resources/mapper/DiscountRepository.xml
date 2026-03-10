@@ -27,7 +27,7 @@
 	    		,update_user = 'test'
 	    		,update_time = now()
 	    where
-	    	id = #{id}
+	    	id = #{discountId}
     </update>
     
     <delete id="deleteDiscountByDishId" parameterType="Long">

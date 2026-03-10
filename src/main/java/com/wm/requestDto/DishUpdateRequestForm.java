@@ -13,9 +13,9 @@ public class DishUpdateRequestForm {
 	private String description;
 	private BigDecimal price;
 	private String image;
+	private Long tag;
 	private Boolean hasDiscount;
 	private BigDecimal rate;
 	private LocalDate startDate;
 	private LocalDate endDate;
-	
 }

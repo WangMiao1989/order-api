@@ -51,4 +51,12 @@
 		order by
 			mt.floor, mt.table_no
     </select>
+    
+    <update id="updateTableEndtime">
+    	update public.t_table_info
+    	set
+    		end_time = now()
+    	where
+    		table_no = #{tableNo}
+    </update>
 </mapper>

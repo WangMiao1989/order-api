@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wm.entity.AllOrderEntity;
 import com.wm.entity.OrderDetailEntity;
-import com.wm.requestDto.OrderServeUpdateRequestForm;
+import com.wm.requestDto.OrderCheckoutRequestForm;
+import com.wm.requestDto.OrderDishQuantityRequestForm;
+import com.wm.requestDto.OrderDishRequestForm;
 import com.wm.requestDto.OrderUpdateRequestForm;
 import com.wm.requestDto.TableNoRequestForm;
 import com.wm.service.OrderService;
@@ -37,7 +39,22 @@ public class OrderController {
 	}
 	
 	@RequestMapping("/serve/update")
-	public void orderServeUpdate(@RequestBody OrderServeUpdateRequestForm request) {
+	public void orderServeUpdate(@RequestBody OrderDishRequestForm request) {
 		orderService.orderServeUpdate(request);
+	}
+	
+	@RequestMapping("/dish-quantity/modify")
+	public void orderDishQuantityModify(@RequestBody OrderDishQuantityRequestForm request) {
+		orderService.orderDishQuantityModify(request);
+	}
+	
+	@RequestMapping("/dish/delete")
+	public void orderDishDelete(@RequestBody OrderDishRequestForm request) {
+		orderService.orderDishDelete(request);
+	}
+	
+	@RequestMapping("/checkout")
+	public void orderCheckout(@RequestBody OrderCheckoutRequestForm request) {
+		orderService.orderCheckout(request);
 	}
 }
