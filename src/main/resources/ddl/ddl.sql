@@ -73,16 +73,9 @@ create table m_user(
     user_name varchar(50),
     user_type varchar(10),
     status varchar(10) default 'active',
-    last_login_time timestamp without time zone
-);
-
-create sequence auth_id_seq;
-create table t_auth(
-    id bigint primary key default nextval('auth_id_seq'),
-    user_id varchar(20),
     token varchar(50),
     expires_time timestamp without time zone,
-    create_time timestamp without time zone default now()
+    last_login_time timestamp without time zone
 );
 
 create table m_table(

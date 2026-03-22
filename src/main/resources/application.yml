@@ -47,3 +47,14 @@ mybatis:
     cache-enabled: false
     lazy-loading-enabled: true
     aggressive-lazy-loading: false
+
+auth:
+  # token认证白名单
+  whitelist:
+    - /dish/retrieve
+    - /category/retrieve
+    - /table/retrieve
+    - /order/retrieve
+    - /order/update
+    - /admin/user/login
+    - /sse/connect

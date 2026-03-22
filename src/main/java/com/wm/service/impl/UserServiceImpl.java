@@ -19,7 +19,7 @@ import com.wm.utils.TokenGenerator;
 public class UserServiceImpl implements UserService{
 	
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 	
 	public LoginResponse login(LoginRequestForm request) {
 		LoginResponse response = new LoginResponse();
@@ -28,18 +28,22 @@ public class UserServiceImpl implements UserService{
 		
 		// 认证失败的场合
 		if(Objects.isNull(user)) {
-			throw new AuthenticationException("");
+			throw new AuthenticationException("用户名或密码有误。");
 		}
 		
 		// 发行token
 		String token = TokenGenerator.generateToken(32);
 		
 		// 保存token
-		userRepository.inserToken(request.getUserId(), token);
+		userRepository.updateToken(request.getUserId(), token);
 		
 		response.setUserInfo(user);
 		response.setToken(token);
 		
 		return response;
+	}
+	
+	public void logout(String userId) {
+		userRepository.deleteToken(userId);
 	}
 }

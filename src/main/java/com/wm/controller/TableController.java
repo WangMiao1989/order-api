@@ -17,7 +17,7 @@ import com.wm.service.TableService;
 public class TableController {
 	
 	@Autowired
-	TableService tableService;
+	private TableService tableService;
 	
 	@RequestMapping("/retrieve")
 	public TableDetailRetrieveResponse tableDetailRetrieve(@RequestBody TableNoRequestForm request) {

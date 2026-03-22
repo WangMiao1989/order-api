@@ -1,14 +1,25 @@
 package com.wm.config;
 
 import com.wm.filter.CorsFilter;
+import com.wm.filter.ExceptionFilter;
 import com.wm.filter.LogFilter;
+import com.wm.mapper.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wm.filter.AuthFilter;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class FilterConfig {
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private AuthWhitelistProperties whitelistProperties;
+	@Autowired
+    private ObjectMapper objectMapper;
 
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter() {
@@ -21,6 +32,18 @@ public class FilterConfig {
         
         return registrationBean;
     }
+    
+    @Bean
+    public FilterRegistrationBean<ExceptionFilter> exceptionFilter() {
+        FilterRegistrationBean<ExceptionFilter> registrationBean = new FilterRegistrationBean<>();
+        
+        registrationBean.setFilter(new ExceptionFilter(objectMapper));
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.setName("ExceptionFilter");
+        registrationBean.setOrder(2); 
+        
+        return registrationBean;
+    }
 
     @Bean
     public FilterRegistrationBean<LogFilter> logFilter() {
@@ -29,7 +52,7 @@ public class FilterConfig {
         registrationBean.setFilter(new LogFilter());
         registrationBean.addUrlPatterns("/*");
         registrationBean.setName("LogFilter");
-        registrationBean.setOrder(2); // 日志过滤器第二个执行
+        registrationBean.setOrder(3);
         
         return registrationBean;
     }
@@ -38,10 +61,10 @@ public class FilterConfig {
     public FilterRegistrationBean<AuthFilter> authFilter() {
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
         
-        registrationBean.setFilter(new AuthFilter());
-        registrationBean.addUrlPatterns("/api/*"); // 只过滤 /api 路径
+        registrationBean.setFilter(new AuthFilter(userRepository, whitelistProperties));
+        registrationBean.addUrlPatterns("/*"); 
         registrationBean.setName("AuthFilter");
-        registrationBean.setOrder(3); // 认证过滤器最后执行
+        registrationBean.setOrder(4); 
         
         return registrationBean;
     }

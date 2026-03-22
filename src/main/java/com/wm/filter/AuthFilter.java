@@ -1,6 +1,13 @@
 package com.wm.filter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Objects;
+
+import com.wm.config.AuthWhitelistProperties;
+import com.wm.entity.UserInfoEntity;
+import com.wm.exception.AuthenticationException;
+import com.wm.mapper.UserRepository;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -8,33 +15,66 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class AuthFilter implements Filter {
+
+	private final  UserRepository userRepository;
+    private final  AuthWhitelistProperties whitelistProperties;
+    
+    public AuthFilter(UserRepository userRepository, AuthWhitelistProperties whitelistProperties ) {
+    	this.userRepository = userRepository;
+    	this.whitelistProperties = whitelistProperties;
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         
         HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse resp = (HttpServletResponse) response;
         
-        // 登录接口不需要认证
         String path = req.getRequestURI();
-        if (path.contains("/login")) {
-            chain.doFilter(request, response);
-            return;
-        }
-        
-        // 检查token
+        boolean isWhitelisted = whitelistProperties.getWhitelist().stream().anyMatch(url -> url.equals(path));
         String token = req.getHeader("Authorization");
-        if (token == null || token.isEmpty()) {
-            resp.setStatus(401);
-            resp.getWriter().write("{\"error\":\"未授权\"}");
-            return;
+        UserInfoEntity userInfo = new UserInfoEntity();
+        
+        // 如果url不在白名单 或 token不为空的场合，需要认证
+        // token不为空的：管理端调用的共同api，因为token被设定，所以验证token有效性
+        if (!isWhitelisted || !Objects.isNull(token)) {
+        	// 真正token取得
+            if (!Objects.isNull(token) && token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+            
+            // token存在性check
+            if (Objects.isNull(token) || token.isEmpty()) {
+                throw new AuthenticationException("登录信息无效，请重新登录。");
+            }
+            
+            // 通过token取得user信息
+            userInfo = userRepository.selectUserInfoByToken(token);
+            
+            // token有效性check
+            if (Objects.isNull(userInfo)) {
+            	throw new AuthenticationException("登录信息无效，请重新登录。");
+            }
+            
+            // token时效性check
+            if (LocalDateTime.now().isAfter(userInfo.getExpiresTime())) {
+            	throw new AuthenticationException("登录信息过期，请重新登录。");
+            }
+        	
+        } else {
+        	// 在白名单并且token为空的场合 ===> 顾客端调用
+        	userInfo.setUserId("customer");
+        	userInfo.setUserName("顾客");
         }
         
-        // token验证通过，继续执行
+        // 把userInfo设定到requestContextHolder里
+        req.setAttribute("userInfo", userInfo);
+        
+        // 继续执行
         chain.doFilter(request, response);
     }
 }

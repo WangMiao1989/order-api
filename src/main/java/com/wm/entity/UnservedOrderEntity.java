@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class AllOrderEntity {
+public class UnservedOrderEntity {
 	private Long dishId;
 	private String name;
 	private Integer totalQuantity;

@@ -2,10 +2,10 @@ package com.wm.service;
 
 import java.util.List;
 
-import com.wm.entity.AllOrderEntity;
+import com.wm.entity.UnservedOrderEntity;
 import com.wm.entity.OrderDetailEntity;
 import com.wm.requestDto.OrderCheckoutRequestForm;
-import com.wm.requestDto.OrderDishQuantityRequestForm;
+import com.wm.requestDto.OrderDishCancelRequestForm;
 import com.wm.requestDto.OrderDishRequestForm;
 import com.wm.requestDto.OrderUpdateRequestForm;
 import com.wm.requestDto.TableNoRequestForm;
@@ -16,13 +16,11 @@ public interface OrderService {
 	
 	public List<OrderDetailEntity> orderListRetrieve(TableNoRequestForm request);
 	
-	public List<AllOrderEntity> allOrderRetrieve();
+	public List<UnservedOrderEntity> unservedOrderRetrieve();
 	
 	public void orderServeUpdate(OrderDishRequestForm request);
 	
-	public void orderDishQuantityModify(OrderDishQuantityRequestForm request);
-	
-	public void orderDishDelete(OrderDishRequestForm request);
+	public void orderDishCancel(OrderDishCancelRequestForm request);
 	
 	public void orderCheckout(OrderCheckoutRequestForm request);
 }

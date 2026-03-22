@@ -14,15 +14,35 @@
         	and status = 'active'
     </select>
     
-    <insert id="inserToken">
-       Insert into public.t_auth (
-       	user_id, 
-       	token,
-       	expires_time
-       ) values ( 
-       	#{userId}, 
-       	#{token},
-       	now() + interval '1 day'
-       );
-    </insert>
+    <update id="updateToken">
+        update public.m_user 
+        set
+        	token = #{token}
+        	,expires_time = now() + interval '1 day'
+        	,last_login_time = now()
+        where
+        	user_id = #{userId}
+    </update>
+    
+    <select id="selectUserInfoByToken" resultType="com.wm.entity.UserInfoEntity">
+       SELECT
+       		user_id
+            ,user_name
+            ,user_type
+            ,expires_time
+        FROM
+        	public.m_user
+        where
+        	token = #{token}
+        	and status = 'active'
+    </select>
+    
+    <update id="deleteToken">
+    	update public.m_user 
+        set
+        	token = null
+        	,expires_time = null
+        where
+        	user_id = #{userId}
+    </update>
 </mapper>

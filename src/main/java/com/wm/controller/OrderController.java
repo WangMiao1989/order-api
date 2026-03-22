@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wm.entity.AllOrderEntity;
+import com.wm.entity.UnservedOrderEntity;
 import com.wm.entity.OrderDetailEntity;
 import com.wm.requestDto.OrderCheckoutRequestForm;
-import com.wm.requestDto.OrderDishQuantityRequestForm;
+import com.wm.requestDto.OrderDishCancelRequestForm;
 import com.wm.requestDto.OrderDishRequestForm;
 import com.wm.requestDto.OrderUpdateRequestForm;
 import com.wm.requestDto.TableNoRequestForm;
@@ -21,7 +21,7 @@ import com.wm.service.OrderService;
 public class OrderController {
 	
 	@Autowired
-	OrderService orderService;
+	private OrderService orderService;
 	
 	@RequestMapping("/update")
 	public void updateOrder(@RequestBody OrderUpdateRequestForm request) {
@@ -33,9 +33,9 @@ public class OrderController {
 		return orderService.orderListRetrieve(request);
 	}
 	
-	@RequestMapping("/all-order/retrieve")
-	public List<AllOrderEntity> allOrderRetrieve() {
-		return orderService.allOrderRetrieve();
+	@RequestMapping("/unserved/retrieve")
+	public List<UnservedOrderEntity> unservedOrderRetrieve() {
+		return orderService.unservedOrderRetrieve();
 	}
 	
 	@RequestMapping("/serve/update")
@@ -43,14 +43,9 @@ public class OrderController {
 		orderService.orderServeUpdate(request);
 	}
 	
-	@RequestMapping("/dish-quantity/modify")
-	public void orderDishQuantityModify(@RequestBody OrderDishQuantityRequestForm request) {
-		orderService.orderDishQuantityModify(request);
-	}
-	
-	@RequestMapping("/dish/delete")
-	public void orderDishDelete(@RequestBody OrderDishRequestForm request) {
-		orderService.orderDishDelete(request);
+	@RequestMapping("/dish/cancel")
+	public void orderDishQuantityModify(@RequestBody OrderDishCancelRequestForm request) {
+		orderService.orderDishCancel(request);
 	}
 	
 	@RequestMapping("/checkout")

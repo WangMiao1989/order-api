@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wm.controller.SseController;
-import com.wm.entity.AllOrderEntity;
+import com.wm.entity.UnservedOrderEntity;
 import com.wm.entity.OrderDetailEntity;
 import com.wm.entity.OrderEntity;
 import com.wm.entity.TableEntity;
@@ -17,7 +17,7 @@ import com.wm.exception.BusinessException;
 import com.wm.mapper.OrderRepository;
 import com.wm.mapper.TableRepository;
 import com.wm.requestDto.OrderCheckoutRequestForm;
-import com.wm.requestDto.OrderDishQuantityRequestForm;
+import com.wm.requestDto.OrderDishCancelRequestForm;
 import com.wm.requestDto.OrderDishRequestForm;
 import com.wm.requestDto.OrderUpdateRequestForm;
 import com.wm.requestDto.TableNoRequestForm;
@@ -28,13 +28,13 @@ import com.wm.service.OrderService;
 public class OrderServiceImpl implements OrderService{
 	
 	@Autowired
-	TableRepository tableRepository;
+	private TableRepository tableRepository;
 	
 	@Autowired
-	OrderRepository orderRepository;
+	private OrderRepository orderRepository;
 	
 	@Autowired
-	SseController sseController;
+	private SseController sseController;
 	
 	// order更新
 	public void orderInfoUpdate(OrderUpdateRequestForm request) {
@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService{
 		orderRepository.updateOrderInfo(orderInfo);
 		
 		// sse触发order更新
-		sseController.notifyOrderUpdated(request.getOrderDetail());
+		sseController.notifyOrderUpdated("{\"type\":\"add\", \"data\":" +request.getOrderDetail() + "}");
 	}
 	
 	// 桌全order取得
@@ -66,8 +66,8 @@ public class OrderServiceImpl implements OrderService{
 	}
 	
 	// 全order取得	
-	public List<AllOrderEntity> allOrderRetrieve(){
-		return orderRepository.selectAllOrder();
+	public List<UnservedOrderEntity> unservedOrderRetrieve(){
+		return orderRepository.selectUnservedOrder();
 	}
 	
 	// 上菜
@@ -75,28 +75,18 @@ public class OrderServiceImpl implements OrderService{
 		orderRepository.updateOrderServe(request.getOrderId(), request.getDishId());
 	}
 	
-	// 菜品更新
-	public void orderDishQuantityModify(OrderDishQuantityRequestForm request) {
-		orderRepository.updateOrderDishQuantity(request.getOrderId(), request.getDishId(), request.getQuantity());
-		
-		// sse触发order更新
-		sseController.notifyOrderUpdated("[{'dishId':" + request.getDishId() + "}]");
-	}
-	
-	// 菜品删除
-	public void orderDishDelete(OrderDishRequestForm request) {
-		// order中当前菜品以外的菜品件数取得
-		Integer cnt =  orderRepository.selectOtherDishCount(request.getOrderId(), request.getDishId());
-		if(cnt == 0) {
-			// 当前order只有当前菜品的场合，全order删除
-			orderRepository.deleteOrder(request.getOrderId());
-		}else {
-			// 当菜品以外还存在的场合，只删除当前菜品
-			orderRepository.deleteOrderDish(request.getOrderId(), request.getDishId());
+	// 菜品退订
+	public void orderDishCancel(OrderDishCancelRequestForm request) {
+		// 更新件数为0件的时候，删除菜品，否者更新菜品数量
+		if (request.getQuantity() == 0 ) {
+			dishDelete(request.getOrderId(), request.getDishId());
+		} else {
+			orderRepository.updateOrderDishQuantity(request.getOrderId(), request.getDishId(), request.getQuantity());
 		}
 		
 		// sse触发order更新
-		sseController.notifyOrderUpdated("[{'dishId':" + request.getDishId() + "}]");
+		sseController.notifyOrderUpdated("{\"type\":\"cancel\", \"dishName\":\"" + request.getDishName()
+		+ "\" ,\"isServed\":" + request.getIsServed() + " ,\"cancelQuantity\":" + request.getCancelQuantity() + "}");
 	}
 	
 	// 结账
@@ -105,5 +95,17 @@ public class OrderServiceImpl implements OrderService{
 			throw new BusinessException("no pay target","支付对象不存在！");
 		}
 		orderRepository.updateOrderPay(request.getOrderIdList());
+	}
+	
+	private void dishDelete(Long orderId, Long dishId) {
+		// order中当前菜品以外的菜品件数取得
+		Integer cnt =  orderRepository.selectOtherDishCount(orderId, dishId);
+		if(cnt == 0) {
+			// 当前order只有当前菜品的场合，全order删除
+			orderRepository.deleteOrder(orderId);
+		}else {
+			// 当菜品以外还存在的场合，只删除当前菜品
+			orderRepository.deleteOrderDish(orderId, dishId);
+		}
 	}
 }

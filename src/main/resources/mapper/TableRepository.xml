@@ -7,13 +7,17 @@
        	,customer_cnt
        	,start_time
        	,create_user
+       	,create_time
        	,update_user
+       	,update_time
        ) values ( 
        	#{tableNo}
        	,#{customerCnt}
        	,#{startTime}
        	,#{createUser}
+       	,#{createTime}
        	,#{updateUser}
+       	,#{updateTime}
        );
     </insert>
     

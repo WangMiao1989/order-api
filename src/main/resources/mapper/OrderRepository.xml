@@ -6,12 +6,16 @@
        	table_id, 
        	order_detail,
        	create_user,
-       	update_user
+       	create_time,
+       	update_user,
+       	update_time
        ) values ( 
        	#{tableId}, 
        	#{orderDetail}::jsonb,
        	#{createUser},
-       	#{updateUser}
+       	#{createTime},
+       	#{updateUser},
+       	#{updateTime}
        );
     </insert>
     
@@ -49,7 +53,7 @@
         	order_time desc, dish_id
     </select>
     
-    <resultMap id="allOrderMap" type="com.wm.entity.AllOrderEntity">
+    <resultMap id="allOrderMap" type="com.wm.entity.UnservedOrderEntity">
 	    <id property="dishId" column="dish_id"/>
 	    <result property="name" column="name"/>
 	    <result property="totalQuantity" column="total_quantity"/>
@@ -60,7 +64,7 @@
 	        <result property="orderTime" column="order_time"/>
 	    </collection>
 	</resultMap>
-    <select id="selectAllOrder" resultMap="allOrderMap">
+    <select id="selectUnservedOrder" resultMap="allOrderMap">
        select 
 		    dish_id
 		    ,name
