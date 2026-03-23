@@ -85,7 +85,13 @@ create table m_table(
     capacity integer
 );
 
-CREATE OR REPLACE VIEW public.v_orders AS 
+create table m_permission(
+    user_type varchar(10),
+    menu_key varchar(20),
+    primary key(user_type,menu_key)
+);
+
+CREATE OR REPLACE VIEW public.v_dining_orders AS 
  SELECT tti.table_no,
     toi.order_id,
     toi.create_time AS order_time,
@@ -97,7 +103,20 @@ CREATE OR REPLACE VIEW public.v_orders AS
     (jsonb_array_elements(toi.order_detail) ->> 'quantity'::text) AS quantity,
     (jsonb_array_elements(toi.order_detail) ->> 'isServed'::text) AS is_served,
     ((jsonb_array_elements(toi.order_detail) ->> 'servedTime'::text))::timestamp without time zone AS served_time
-   FROM (t_table_info tti
-     LEFT JOIN t_order_info toi ON ((tti.table_id = toi.table_id)))
+   FROM (public.t_table_info tti
+     LEFT JOIN public.t_order_info toi ON ((tti.table_id = toi.table_id)))
   WHERE (tti.end_time IS NULL);
+
+create or replace view public.v_paid_order as
+SELECT 
+    tti.table_no,
+    tti.start_time,
+    tti.end_time,
+    (jsonb_array_elements(toi.order_detail) ->> 'dishId'::text)::integer AS dish_id,
+    (jsonb_array_elements(toi.order_detail) ->> 'name'::text) AS name,
+    (jsonb_array_elements(toi.order_detail) ->> 'price'::text)::numeric AS price,
+    (jsonb_array_elements(toi.order_detail) ->> 'quantity'::text)::numeric AS quantity
+from 
+    public.t_table_info tti
+    inner join public.t_order_info toi ON tti.table_id = toi.table_id and toi.is_paid = true;
   

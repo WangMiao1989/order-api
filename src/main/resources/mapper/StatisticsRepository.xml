@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wm.mapper.StatisticsRepository">
+    <resultMap id="RevenueInfoMap" type="com.wm.entity.RevenueInfoEntity">
+    	<id property="yearMonth" column="year_month"/>
+	    <result property="totalRevenue" column="total_revenue"/>
+	    <collection property="dishList" ofType="com.wm.entity.OrderDishEntity">
+	        <id property="dishId" column="dish_id"/>
+	        <result property="name" column="name"/>
+	        <result property="price" column="price"/>
+	        <result property="quantity" column="quantity"/>
+	        <result property="isServed" column="is_served"/>
+	        <result property="servedTime" column="served_time"/>
+	    </collection>
+    </resultMap>
+    
+    <select id="selectRevenueByMonth" resultMap="RevenueInfoMap">
+    	with v_year_month_summary as 
+		(
+		select
+		    to_char(start_time, 'YYYY-MM') as year_month,
+		    dish_id,
+		    name,
+		    price,
+		    quantity
+		from
+		    v_paid_order
+		)
+		select distinct
+		    year_month,
+		    sum(quantity * price) over(partition by year_month) as total_revenue,
+		    name as dish_name,
+		    sum(quantity) over(partition by year_month, dish_id) as dish_quantity,
+		    sum(quantity * price) over(partition by year_month, dish_id) as dish_amount
+		from
+		    v_year_month_summary
+		where
+			year_month between #{startMonth} and #{endMonth}
+		order by year_month desc, name
+    </select>
+</mapper>

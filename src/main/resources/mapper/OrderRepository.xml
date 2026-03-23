@@ -24,7 +24,7 @@
 	    <result property="orderTime" column="order_time"/>
 	    <result property="isPaid" column="is_paid"/>
 	    <result property="paidTime" column="paid_time"/>
-	    <collection property="dishList" ofType="com.wm.entity.OrderDishEntity">
+	    <collection property="dishSummary" ofType="com.wm.entity.DishRevenueEntity">
 	        <id property="dishId" column="dish_id"/>
 	        <result property="name" column="name"/>
 	        <result property="price" column="price"/>
@@ -46,7 +46,7 @@
             ,is_served
             ,served_time
         FROM
-            public.v_orders
+            public.v_dining_orders
         where
         	table_no= #{tableNo}
         order by
@@ -74,7 +74,7 @@
 		    ,quantity
 		    ,order_time
 		from
-		    public.v_orders
+		    public.v_dining_orders
 		where
 		    is_served = 'false'
 		order by
@@ -109,7 +109,7 @@
     	select
     		count(1)
     	from
-    		public.v_orders
+    		public.v_dining_orders
     	where
     		order_id = #{orderId}
     		and dish_id != #{dishId}

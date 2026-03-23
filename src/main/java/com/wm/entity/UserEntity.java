@@ -8,5 +8,6 @@ import lombok.Data;
 public class UserEntity{
 	private String userName;
 	private String userType;
+	private String permission;
 	private LocalDateTime lastLoginTime;
 }
