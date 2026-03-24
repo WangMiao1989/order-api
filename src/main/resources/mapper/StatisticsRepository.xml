@@ -33,6 +33,6 @@
 		    v_year_month_summary
 		where
 			year_month between #{startMonth} and #{endMonth}
-		order by year_month desc, name
+		order by year_month, name
     </select>
 </mapper>
