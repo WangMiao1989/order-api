@@ -4,13 +4,10 @@
     <resultMap id="RevenueInfoMap" type="com.wm.entity.RevenueInfoEntity">
     	<id property="yearMonth" column="year_month"/>
 	    <result property="totalRevenue" column="total_revenue"/>
-	    <collection property="dishList" ofType="com.wm.entity.OrderDishEntity">
-	        <id property="dishId" column="dish_id"/>
-	        <result property="name" column="name"/>
-	        <result property="price" column="price"/>
-	        <result property="quantity" column="quantity"/>
-	        <result property="isServed" column="is_served"/>
-	        <result property="servedTime" column="served_time"/>
+	    <collection property="dishSummary" ofType="com.wm.entity.DishRevenueEntity">
+	        <id property="dishName" column="dish_name"/>
+	        <result property="dishQuantity" column="dish_quantity"/>
+	        <result property="dishAmount" column="dish_amount"/>
 	    </collection>
     </resultMap>
     

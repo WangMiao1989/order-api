@@ -24,7 +24,7 @@
 	    <result property="orderTime" column="order_time"/>
 	    <result property="isPaid" column="is_paid"/>
 	    <result property="paidTime" column="paid_time"/>
-	    <collection property="dishSummary" ofType="com.wm.entity.DishRevenueEntity">
+	    <collection property="dishList" ofType="com.wm.entity.OrderDishEntity">
 	        <id property="dishId" column="dish_id"/>
 	        <result property="name" column="name"/>
 	        <result property="price" column="price"/>
