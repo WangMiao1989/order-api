@@ -1,5 +1,5 @@
--- ��ͬtable����
-create table #schema#.m_tenant(
+-- public
+create table public.m_tenant(
     tenant_id varchar(20) primary key,
     tenant_name varchar(50),
     schema_name varchar(50),
@@ -7,8 +7,10 @@ create table #schema#.m_tenant(
     remark text
 );
 
--- ����shcma
-create SCHEMA jdj20260101;
+-- create schema
+create schema jdj20260101;
+set search_path to jdj20260101;
+
 
 create sequence category_id_seq;
 create table m_category(
