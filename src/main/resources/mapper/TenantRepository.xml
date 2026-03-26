@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wm.mapper.TenantRepository">
+    <select id="selectTenantInfo" resultType="com.wm.entity.TenantEntity">
+    	select
+    		tenant_id
+    		,tenant_name
+    		,schema_name
+    		,contact_tel
+    	from
+    		public.m_tenant
+    	where
+    		tenant_id = #{tenantId}
+    </select>
+</mapper>

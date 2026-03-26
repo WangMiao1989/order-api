@@ -1,3 +1,15 @@
+-- ��ͬtable����
+create table #schema#.m_tenant(
+    tenant_id varchar(20) primary key,
+    tenant_name varchar(50),
+    schema_name varchar(50),
+    contact_tel varchar(20),
+    remark text
+);
+
+-- ����shcma
+create SCHEMA jdj20260101;
+
 create sequence category_id_seq;
 create table m_category(
     id bigint primary key default nextval('category_id_seq'),
@@ -91,7 +103,7 @@ create table m_permission(
     primary key(user_type,menu_key)
 );
 
-CREATE OR REPLACE VIEW public.v_dining_orders AS 
+CREATE OR REPLACE VIEW v_dining_orders AS 
  SELECT tti.table_no,
     toi.order_id,
     toi.create_time AS order_time,
@@ -103,11 +115,11 @@ CREATE OR REPLACE VIEW public.v_dining_orders AS
     (jsonb_array_elements(toi.order_detail) ->> 'quantity'::text) AS quantity,
     (jsonb_array_elements(toi.order_detail) ->> 'isServed'::text) AS is_served,
     ((jsonb_array_elements(toi.order_detail) ->> 'servedTime'::text))::timestamp without time zone AS served_time
-   FROM (public.t_table_info tti
-     LEFT JOIN public.t_order_info toi ON ((tti.table_id = toi.table_id)))
+   FROM (t_table_info tti
+     LEFT JOIN t_order_info toi ON ((tti.table_id = toi.table_id)))
   WHERE (tti.end_time IS NULL);
 
-create or replace view public.v_paid_order as
+create or replace view v_paid_order as
 SELECT 
     tti.table_no,
     tti.start_time,
@@ -117,6 +129,7 @@ SELECT
     (jsonb_array_elements(toi.order_detail) ->> 'price'::text)::numeric AS price,
     (jsonb_array_elements(toi.order_detail) ->> 'quantity'::text)::numeric AS quantity
 from 
-    public.t_table_info tti
-    inner join public.t_order_info toi ON tti.table_id = toi.table_id and toi.is_paid = true;
+    t_table_info tti
+    inner join t_order_info toi ON tti.table_id = toi.table_id and toi.is_paid = true;
   
+

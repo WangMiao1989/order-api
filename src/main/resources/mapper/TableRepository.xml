@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wm.mapper.TableRepository">
     <insert id="updateTableInfo" useGeneratedKeys="true" keyProperty="tableId" parameterType="com.wm.entity.TableEntity">
-       Insert into public.t_table_info (
+       Insert into #schema#.t_table_info (
        	table_no 
        	,customer_cnt
        	,start_time
@@ -33,7 +33,7 @@
        		,update_user
        		,update_time
         FROM
-            public.t_table_info
+            #schema#.t_table_info
         where
         	table_no = #{tableNo}
         	and end_time is null
@@ -50,14 +50,14 @@
 		    ,coalesce(tti.customer_cnt, 0) as  customer_cnt
 		    ,tti.start_time
 		from
-		    public.m_table mt
-		    left join public.t_table_info tti on mt.table_no = tti.table_no and tti.end_time is null
+		    #schema#.m_table mt
+		    left join #schema#.t_table_info tti on mt.table_no = tti.table_no and tti.end_time is null
 		order by
 			mt.floor, mt.table_no
     </select>
     
     <update id="updateTableEndtime">
-    	update public.t_table_info
+    	update #schema#.t_table_info
     	set
     		end_time = now()
     	where

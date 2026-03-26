@@ -22,6 +22,7 @@ import com.wm.requestDto.OrderDishRequestForm;
 import com.wm.requestDto.OrderUpdateRequestForm;
 import com.wm.requestDto.TableNoRequestForm;
 import com.wm.service.OrderService;
+import com.wm.utils.ContextHolder;
 
 @Service
 @Transactional
@@ -47,7 +48,7 @@ public class OrderServiceImpl implements OrderService{
 			tableRepository.updateTableInfo(tableInfo);
 			
 			// sse触发table更新
-			sseController.notifyTableUpdated();
+			sseController.sendEmitter(ContextHolder.getTenantId(), "table-updated", "update");
 		}
 		
 		// order info更新
@@ -57,7 +58,7 @@ public class OrderServiceImpl implements OrderService{
 		orderRepository.updateOrderInfo(orderInfo);
 		
 		// sse触发order更新
-		sseController.notifyOrderUpdated("{\"type\":\"add\", \"data\":" +request.getOrderDetail() + "}");
+		sseController.sendEmitter(ContextHolder.getTenantId(), "order-updated", "{\"type\":\"add\", \"data\":" +request.getOrderDetail() + "}");
 	}
 	
 	// 桌全order取得
@@ -85,8 +86,9 @@ public class OrderServiceImpl implements OrderService{
 		}
 		
 		// sse触发order更新
-		sseController.notifyOrderUpdated("{\"type\":\"cancel\", \"dishName\":\"" + request.getDishName()
-		+ "\" ,\"isServed\":" + request.getIsServed() + " ,\"cancelQuantity\":" + request.getCancelQuantity() + "}");
+		sseController.sendEmitter(ContextHolder.getTenantId(), "order-updated",
+				"{\"type\":\"cancel\", \"dishName\":\"" + request.getDishName() +
+				"\" ,\"isServed\":" + request.getIsServed() + " ,\"cancelQuantity\":" + request.getCancelQuantity() + "}");
 	}
 	
 	// 结账

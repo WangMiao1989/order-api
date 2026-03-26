@@ -21,7 +21,7 @@
 		    price,
 		    quantity
 		from
-		    v_paid_order
+		    #schema#.v_paid_order
 		)
 		select distinct
 		    year_month,

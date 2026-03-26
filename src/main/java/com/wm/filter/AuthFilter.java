@@ -15,9 +15,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class AuthFilter implements Filter {
 
 	private final  UserRepository userRepository;
@@ -33,12 +31,11 @@ public class AuthFilter implements Filter {
             throws IOException, ServletException {
         
         HttpServletRequest req = (HttpServletRequest) request;
-        
-        String path = req.getRequestURI();
-        boolean isWhitelisted = whitelistProperties.getWhitelist().stream().anyMatch(url -> url.equals(path));
         String token = req.getHeader("Authorization");
         UserInfoEntity userInfo = new UserInfoEntity();
         
+        // 白名单判定
+        boolean isWhitelisted = whitelistProperties.getWhitelist().stream().anyMatch(url -> url.equals(req.getRequestURI()));
         // 如果url不在白名单 或 token不为空的场合，需要认证
         // token不为空的：管理端调用的共同api，因为token被设定，所以验证token有效性
         if (!isWhitelisted || !Objects.isNull(token)) {

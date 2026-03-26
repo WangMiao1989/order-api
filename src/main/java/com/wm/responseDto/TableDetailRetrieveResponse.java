@@ -6,4 +6,5 @@ import lombok.Data;
 public class TableDetailRetrieveResponse {
 	private Long tableId;
 	private Integer customerCnt;
+	private String tenantName;
 }

@@ -51,6 +51,7 @@ mybatis:
 auth:
   # token认证白名单
   whitelist:
+    - /tenant/retrieve
     - /dish/retrieve
     - /category/retrieve
     - /table/retrieve

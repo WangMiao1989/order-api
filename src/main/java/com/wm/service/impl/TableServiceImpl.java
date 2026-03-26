@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wm.entity.TableEntity;
+import com.wm.entity.TenantEntity;
 import com.wm.entity.AllTableEntity;
 import com.wm.mapper.TableRepository;
 import com.wm.requestDto.TableNoRequestForm;
 import com.wm.responseDto.TableDetailRetrieveResponse;
 import com.wm.service.TableService;
+import com.wm.utils.ContextHolder;
 
 @Service
 @Transactional
@@ -29,6 +31,13 @@ public class TableServiceImpl implements TableService{
 		TableEntity tableInfo =  tableRepository.selectTableInfo(request.getTableNo());
 		if(!Objects.isNull(tableInfo)) {
 			BeanUtils.copyProperties(tableInfo, response);
+		}
+		
+		// 店铺名称取得
+		TenantEntity  tenantInfo = ContextHolder.getContextHolder("tenantInfo", TenantEntity.class);
+		if(!Objects.isNull(tenantInfo)) {
+			// 店铺名称设定
+			response.setTenantName(tenantInfo.getTenantName());
 		}
 
 		return response;

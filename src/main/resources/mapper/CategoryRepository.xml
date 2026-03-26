@@ -9,7 +9,7 @@
             , description
             , icon
         FROM
-            public.m_category
+            #schema#.m_category
         ORDER BY
             id
     </select>

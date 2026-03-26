@@ -3,6 +3,8 @@ package com.wm.config;
 import com.wm.filter.CorsFilter;
 import com.wm.filter.ExceptionFilter;
 import com.wm.filter.LogFilter;
+import com.wm.filter.TenantFilter;
+import com.wm.mapper.TenantRepository;
 import com.wm.mapper.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wm.filter.AuthFilter;
@@ -17,7 +19,9 @@ public class FilterConfig {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private AuthWhitelistProperties whitelistProperties;
+	private TenantRepository tenantRepository;
+	@Autowired
+	private AuthWhitelistProperties authWhitelistProperties;
 	@Autowired
     private ObjectMapper objectMapper;
 
@@ -58,13 +62,25 @@ public class FilterConfig {
     }
 
     @Bean
+    public FilterRegistrationBean<TenantFilter> tenantFilter() {
+        FilterRegistrationBean<TenantFilter> registrationBean = new FilterRegistrationBean<>();
+        
+        registrationBean.setFilter(new TenantFilter(tenantRepository));
+        registrationBean.addUrlPatterns("/*"); 
+        registrationBean.setName("TenantFilter");
+        registrationBean.setOrder(4); 
+        
+        return registrationBean;
+    }
+    
+    @Bean
     public FilterRegistrationBean<AuthFilter> authFilter() {
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
         
-        registrationBean.setFilter(new AuthFilter(userRepository, whitelistProperties));
+        registrationBean.setFilter(new AuthFilter(userRepository, authWhitelistProperties));
         registrationBean.addUrlPatterns("/*"); 
         registrationBean.setName("AuthFilter");
-        registrationBean.setOrder(4); 
+        registrationBean.setOrder(5); 
         
         return registrationBean;
     }

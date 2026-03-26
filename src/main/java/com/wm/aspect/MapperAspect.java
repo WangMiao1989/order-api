@@ -8,13 +8,10 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.wm.entity.BaseEntity;
 import com.wm.entity.UserInfoEntity;
-
-import jakarta.servlet.http.HttpServletRequest;
+import com.wm.utils.ContextHolder;
 
 @Aspect
 @Component
@@ -25,24 +22,15 @@ public class MapperAspect {
 	
 	@Before("mapperMethod()")
 	public void beforeMapper(JoinPoint joinPoint) {
-		// use信息取得
-		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-		
-		if(Objects.isNull(attributes)) {
+		// userInfo取得
+		UserInfoEntity userInfo = ContextHolder.getContextHolder("userInfo", UserInfoEntity.class);
+		if(Objects.isNull(userInfo)) {
 			return;
 		}
-		
-		HttpServletRequest request = attributes.getRequest();
-		UserInfoEntity currentUser = (UserInfoEntity)request.getAttribute("userInfo");
-		
-		if(Objects.isNull(currentUser)) {
-			return;
-		}
-		
 		Object[] args = joinPoint.getArgs();
 		for(Object arg: args) {
 			if(arg instanceof BaseEntity) {
-				setUserInfo((BaseEntity)arg, currentUser);
+				setUserInfo((BaseEntity)arg, userInfo);
 			}
 		}
 	}

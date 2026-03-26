@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wm.constant.CommonCode;
 import com.wm.exception.AuthenticationException;
 import com.wm.exception.BusinessException;
+import com.wm.exception.ForbiddenException;
 import com.wm.response.GlobalResponse;
 
 import jakarta.servlet.Filter;
@@ -45,6 +46,9 @@ public class ExceptionFilter implements Filter {
 		} else if (e instanceof AuthenticationException) {
 			status = HttpStatus.UNAUTHORIZED.value();
 			responseStatus = CommonCode.RESPONSE_UNAUTHORIZED;
+		} else if (e instanceof ForbiddenException) {
+			status = HttpStatus.FORBIDDEN.value();
+			responseStatus = CommonCode.RESPONSE_FORBIDDEN;
 		} else {
 			status = HttpStatus.INTERNAL_SERVER_ERROR.value();
 			responseStatus = CommonCode.RESPONSE_SYSTEM_ERROR;

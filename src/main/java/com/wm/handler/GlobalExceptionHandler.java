@@ -36,7 +36,6 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SystemException.class)
     public GlobalResponse<Void> handleException(SystemException e){
-        log.error("系统异常: {}", e.getMessage(), e);
         return GlobalResponse.globalError(CommonCode.RESPONSE_SYSTEM_ERROR, null, "系统异常！");
     }
     

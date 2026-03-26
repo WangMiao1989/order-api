@@ -30,7 +30,7 @@ public class CorsFilter implements Filter {
         // 设置 CORS 响应头
         resp.setHeader("Access-Control-Allow-Origin", "*"); // 前端地址
         resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+        resp.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, X-Tenant");
         resp.setHeader("Access-Control-Allow-Credentials", "true");
         resp.setHeader("Access-Control-Max-Age", "3600"); // 预检请求缓存时间，单位秒
 
