@@ -7,7 +7,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.wm.entity.TenantEntity;
 import com.wm.exception.ForbiddenException;
-import com.wm.exception.SystemException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
