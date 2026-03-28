@@ -11,6 +11,7 @@ import com.wm.entity.AllTableEntity;
 import com.wm.requestDto.TableNoRequestForm;
 import com.wm.responseDto.TableDetailRetrieveResponse;
 import com.wm.service.TableService;
+import com.wm.utils.ContextHolder;
 
 @RestController
 @RequestMapping("/table")
@@ -18,6 +19,9 @@ public class TableController {
 	
 	@Autowired
 	private TableService tableService;
+	
+	@Autowired
+	private SseController sseController;
 	
 	@RequestMapping("/retrieve")
 	public TableDetailRetrieveResponse tableDetailRetrieve(@RequestBody TableNoRequestForm request) {
@@ -32,5 +36,10 @@ public class TableController {
 	@RequestMapping("/finish")
 	public void tableFinish(@RequestBody TableNoRequestForm request) {
 		tableService.tableFinish(request);
+	}
+	
+	@RequestMapping("customer/checkout")
+	public void customerCheckout(@RequestBody TableNoRequestForm request) {
+		sseController.sendEmitter(ContextHolder.getTenantId(), "checkout", request.getTableNo() + "桌结账");
 	}
 }

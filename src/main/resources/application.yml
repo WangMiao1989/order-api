@@ -55,6 +55,7 @@ auth:
     - /dish/retrieve
     - /category/retrieve
     - /table/retrieve
+    - /table/customer/checkout
     - /order/retrieve
     - /order/update
     - /admin/user/login
