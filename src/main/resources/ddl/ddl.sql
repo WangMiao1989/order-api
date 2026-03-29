@@ -11,7 +11,6 @@ create table public.m_tenant(
 create schema jdj20260101;
 set search_path to jdj20260101;
 
-
 create sequence category_id_seq;
 create table m_category(
     id bigint primary key default nextval('category_id_seq'),

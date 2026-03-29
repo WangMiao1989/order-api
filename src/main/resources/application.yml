@@ -7,9 +7,9 @@ spring:
   
   # PostgreSQL 配置
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: 1234
+    url: jdbc:postgresql://localhost:5432/orderdb
+    username: appadmin
+    password: admin1234
     driver-class-name: org.postgresql.Driver
 
   # JPA 配置
