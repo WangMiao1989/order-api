@@ -3,14 +3,14 @@
 <mapper namespace="com.wm.mapper.OrderRepository">    
     <insert id="updateOrderInfo" useGeneratedKeys="true" keyProperty="orderId" parameterType="com.wm.entity.OrderEntity">
        Insert into #schema#.t_order_info (
-       	table_id, 
+       	table_session_id, 
        	order_detail,
        	create_user,
        	create_time,
        	update_user,
        	update_time
        ) values ( 
-       	#{tableId}, 
+       	#{tableSessionId}, 
        	#{orderDetail}::jsonb,
        	#{createUser},
        	#{createTime},

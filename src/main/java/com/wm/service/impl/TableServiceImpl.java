@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wm.entity.TableEntity;
+import com.wm.entity.TableSessionEntity;
 import com.wm.entity.TenantEntity;
 import com.wm.entity.AllTableEntity;
 import com.wm.mapper.TableRepository;
@@ -28,7 +28,7 @@ public class TableServiceImpl implements TableService{
 		TableDetailRetrieveResponse response = new TableDetailRetrieveResponse();
 		
 		// table信息取得
-		TableEntity tableInfo =  tableRepository.selectTableInfo(request.getTableNo());
+		TableSessionEntity tableInfo =  tableRepository.selectTableInfo(request.getTableNo());
 		if(!Objects.isNull(tableInfo)) {
 			BeanUtils.copyProperties(tableInfo, response);
 		}

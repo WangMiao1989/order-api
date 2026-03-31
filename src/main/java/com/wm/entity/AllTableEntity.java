@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class AllTableEntity {
+	private String tableSessionId;
 	private String tableNo;
 	private String floor;
 	private String type;

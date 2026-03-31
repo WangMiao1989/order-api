@@ -8,8 +8,8 @@ create table public.m_tenant(
 );
 
 -- create schema
-create schema jdj20260101;
-set search_path to jdj20260101;
+create schema jdj260101;
+set search_path to jdj260101;
 
 create sequence category_id_seq;
 create table m_category(
@@ -54,9 +54,8 @@ create table t_discount(
     update_time timestamp without time zone default now()
 );
 
-create sequence table_id_seq;
-create table t_table_info(
-    table_id bigint primary key default nextval('table_id_seq'),
+create table t_table_session_info(
+    table_session_id varchar(30) primary key,
     table_no varchar(20) not null,
     customer_cnt integer not null,
     start_time timestamp without time zone not null,
@@ -70,7 +69,7 @@ create table t_table_info(
 create sequence order_id_seq;
 create table t_order_info(
     order_id bigint primary key default nextval('order_id_seq'),
-    table_id bigint not null,
+    table_session_id varchar(30)  not null,
     order_detail jsonb,
     is_paid boolean default false,
     paid_time timestamp without time zone,
@@ -105,7 +104,7 @@ create table m_permission(
 );
 
 CREATE OR REPLACE VIEW v_dining_orders AS 
- SELECT tti.table_no,
+ SELECT ttsi.table_no,
     toi.order_id,
     toi.create_time AS order_time,
     toi.is_paid,
@@ -116,21 +115,21 @@ CREATE OR REPLACE VIEW v_dining_orders AS
     (jsonb_array_elements(toi.order_detail) ->> 'quantity'::text) AS quantity,
     (jsonb_array_elements(toi.order_detail) ->> 'isServed'::text) AS is_served,
     ((jsonb_array_elements(toi.order_detail) ->> 'servedTime'::text))::timestamp without time zone AS served_time
-   FROM (t_table_info tti
-     LEFT JOIN t_order_info toi ON ((tti.table_id = toi.table_id)))
-  WHERE (tti.end_time IS NULL);
+   FROM (t_table_session_info ttsi
+     LEFT JOIN t_order_info toi ON ((ttsi.table_session_id = toi.table_session_id)))
+  WHERE (ttsi.end_time IS NULL);
 
 create or replace view v_paid_order as
 SELECT 
-    tti.table_no,
-    tti.start_time,
-    tti.end_time,
+    ttsi.table_no,
+    ttsi.start_time,
+    ttsi.end_time,
     (jsonb_array_elements(toi.order_detail) ->> 'dishId'::text)::integer AS dish_id,
     (jsonb_array_elements(toi.order_detail) ->> 'name'::text) AS name,
     (jsonb_array_elements(toi.order_detail) ->> 'price'::text)::numeric AS price,
     (jsonb_array_elements(toi.order_detail) ->> 'quantity'::text)::numeric AS quantity
 from 
-    t_table_info tti
-    inner join t_order_info toi ON tti.table_id = toi.table_id and toi.is_paid = true;
+    t_table_session_info ttsi
+    inner join t_order_info toi ON ttsi.table_session_id = toi.table_session_id and toi.is_paid = true;
   
 

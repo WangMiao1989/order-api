@@ -12,7 +12,7 @@ import com.wm.controller.SseController;
 import com.wm.entity.UnservedOrderEntity;
 import com.wm.entity.OrderDetailEntity;
 import com.wm.entity.OrderEntity;
-import com.wm.entity.TableEntity;
+import com.wm.entity.TableSessionEntity;
 import com.wm.exception.BusinessException;
 import com.wm.mapper.OrderRepository;
 import com.wm.mapper.TableRepository;
@@ -23,6 +23,7 @@ import com.wm.requestDto.OrderUpdateRequestForm;
 import com.wm.requestDto.TableNoRequestForm;
 import com.wm.service.OrderService;
 import com.wm.utils.ContextHolder;
+import com.wm.utils.TableSessionIdGenerator;
 
 @Service
 @Transactional
@@ -40,10 +41,12 @@ public class OrderServiceImpl implements OrderService{
 	// order更新
 	public void orderInfoUpdate(OrderUpdateRequestForm request) {
 		// table信息取得
-		TableEntity tableInfo =  tableRepository.selectTableInfo(request.getTableNo());
+		TableSessionEntity tableInfo =  tableRepository.selectTableInfo(request.getTableNo());
 		// table信息不存在的情况，保存
 		if(Objects.isNull(tableInfo)) {
-			tableInfo = new TableEntity();
+			tableInfo = new TableSessionEntity();
+			// 单号生成
+			tableInfo.setTableSessionId(TableSessionIdGenerator.generateTableSessionId());
 			BeanUtils.copyProperties(request, tableInfo);
 			tableRepository.updateTableInfo(tableInfo);
 			
@@ -53,7 +56,7 @@ public class OrderServiceImpl implements OrderService{
 		
 		// order info更新
 		OrderEntity orderInfo= new OrderEntity();
-		orderInfo.setTableId(tableInfo.getTableId());
+		orderInfo.setTableSessionId(tableInfo.getTableSessionId());
 		orderInfo.setOrderDetail(request.getOrderDetail());
 		orderRepository.updateOrderInfo(orderInfo);
 		

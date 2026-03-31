@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wm.mapper.TableRepository">
-    <insert id="updateTableInfo" useGeneratedKeys="true" keyProperty="tableId" parameterType="com.wm.entity.TableEntity">
-       Insert into #schema#.t_table_info (
-       	table_no 
+    <insert id="updateTableInfo" useGeneratedKeys="true" keyProperty="tableSessionId" parameterType="com.wm.entity.TableSessionEntity">
+       Insert into #schema#.t_table_session_info (
+       	table_session_id
+       	,table_no 
        	,customer_cnt
        	,start_time
        	,create_user
@@ -11,7 +12,8 @@
        	,update_user
        	,update_time
        ) values ( 
-       	#{tableNo}
+        #{tableSessionId}
+        ,#{tableNo}
        	,#{customerCnt}
        	,#{startTime}
        	,#{createUser}
@@ -21,9 +23,9 @@
        );
     </insert>
     
-    <select id="selectTableInfo" resultType="com.wm.entity.TableEntity">
+    <select id="selectTableInfo" resultType="com.wm.entity.TableSessionEntity">
        SELECT
-            table_id
+            table_session_id
             ,table_no
             ,customer_cnt
             ,start_time
@@ -33,7 +35,7 @@
        		,update_user
        		,update_time
         FROM
-            #schema#.t_table_info
+            #schema#.t_table_session_info
         where
         	table_no = #{tableNo}
         	and end_time is null
@@ -43,21 +45,22 @@
     
     <select id="selectAllTable" resultType="com.wm.entity.AllTableEntity">
     	select
-		    mt.table_no
+    		ttsi.table_session_id
+		    ,mt.table_no
 		    ,mt.floor
 		    ,mt.type
 		    ,mt.capacity
-		    ,coalesce(tti.customer_cnt, 0) as  customer_cnt
-		    ,tti.start_time
+		    ,coalesce(ttsi.customer_cnt, 0) as  customer_cnt
+		    ,ttsi.start_time
 		from
 		    #schema#.m_table mt
-		    left join #schema#.t_table_info tti on mt.table_no = tti.table_no and tti.end_time is null
+		    left join #schema#.t_table_session_info ttsi on mt.table_no = ttsi.table_no and ttsi.end_time is null
 		order by
 			mt.floor, mt.table_no
     </select>
     
     <update id="updateTableEndtime">
-    	update #schema#.t_table_info
+    	update #schema#.t_table_session_info
     	set
     		end_time = now()
     	where

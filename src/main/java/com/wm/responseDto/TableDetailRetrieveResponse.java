@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class TableDetailRetrieveResponse {
-	private Long tableId;
+	private String tableSessionId;
 	private Integer customerCnt;
 	private String tenantName;
 }

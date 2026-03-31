@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class TableEntity extends BaseEntity{
-	private Long tableId;
+public class TableSessionEntity extends BaseEntity{
+	private String tableSessionId;
 	private String tableNo;
 	private Integer customerCnt;
 	private LocalDateTime startTime;
