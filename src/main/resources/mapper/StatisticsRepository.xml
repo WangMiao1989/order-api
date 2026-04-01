@@ -1,38 +1,67 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wm.mapper.StatisticsRepository">
-    <resultMap id="RevenueInfoMap" type="com.wm.entity.RevenueInfoEntity">
-    	<id property="yearMonth" column="year_month"/>
-	    <result property="totalRevenue" column="total_revenue"/>
-	    <collection property="dishSummary" ofType="com.wm.entity.DishRevenueEntity">
-	        <id property="dishName" column="dish_name"/>
-	        <result property="dishQuantity" column="dish_quantity"/>
-	        <result property="dishAmount" column="dish_amount"/>
-	    </collection>
-    </resultMap>
     
-    <select id="selectRevenueByMonth" resultMap="RevenueInfoMap">
-    	with v_year_month_summary as 
-		(
-		select
-		    to_char(start_time, 'YYYY-MM') as year_month,
+    <select id="selectRevenueByPeriod" resultType="com.wm.entity.PeriodRevenueInfoEntity">
+    	select
+		    to_char(start_time, 'YYYY-MM-DD') as business_date,
 		    dish_id,
 		    name,
 		    price,
-		    quantity
+		    sum(quantity::numeric) as quantity
 		from
-		    #schema#.v_paid_order
-		)
-		select distinct
-		    year_month,
-		    sum(quantity * price) over(partition by year_month) as total_revenue,
-		    name as dish_name,
-		    sum(quantity) over(partition by year_month, dish_id) as dish_quantity,
-		    sum(quantity * price) over(partition by year_month, dish_id) as dish_amount
-		from
-		    v_year_month_summary
+		    #schema#.v_table_order
 		where
-			year_month between #{startMonth} and #{endMonth}
-		order by year_month, name
+			is_paid = true
+		    and to_char(start_time, 'YYYY-MM-DD') between #{startDate} and #{endDate} 
+		group by to_char(start_time, 'YYYY-MM-DD'), dish_id, name, price
+		order by business_date, dish_id
+    </select>
+    
+    <resultMap id="DailyRevenueInfoMap"  type="com.wm.entity.DailyRevenueInfoEntity">
+    	<id property="tableSessionId" column="table_session_id"/>
+	    <result property="tableNo" column="table_no"/>
+	    <result property="customerCnt" column="customer_cnt"/>
+	    <result property="startTime" column="start_time"/>
+	    <result property="endTime" column="end_time"/>
+	    <collection property="orderList" ofType="com.wm.entity.OrderDetailEntity">
+	    	<id property="orderId" column="order_id"/>
+	    	<result property="orderTime" column="order_time"/>
+	    	<result property="isPaid" column="is_paid"/>
+	    	<result property="paidTime" column="paid_time"/>
+	    	<collection property="dishList" ofType="com.wm.entity.OrderDishEntity">
+	    		<id property="dishId" column="dish_id"/>
+	    		<result property="name" column="name"/>
+	    		<result property="price" column="price"/>
+	    		<result property="quantity" column="quantity"/>
+	    		<result property="isServed" column="is_served"/>
+	    		<result property="servedTime" column="served_time"/>
+	    	</collection>
+	    </collection>
+    </resultMap>
+    
+    <select id="selectRevenueByDate" resultMap="DailyRevenueInfoMap">
+    	select
+		    table_session_id,
+		    table_no,
+		    customer_cnt,
+		    start_time::timestamp,
+		    end_time::timestamp,
+		    order_id,
+		    order_time,
+		    is_paid,
+		    paid_time::timestamp,
+		    dish_id,
+		    name,
+		    price,
+		    quantity,
+		    is_served,
+		    served_time::timestamp
+		from
+		    #schema#.v_table_order
+		where
+		    to_char(start_time, 'YYYY-MM-DD') = #{searchDate}
+		order by 
+		    start_time 
     </select>
 </mapper>

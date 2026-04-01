@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wm.entity.RevenueInfoEntity;
-import com.wm.requestDto.RevenueRetrieveRequestForm;
+import com.wm.entity.DailyRevenueInfoEntity;
+import com.wm.entity.PeriodRevenueInfoEntity;
+import com.wm.requestDto.DailyRevenueRetrieveRequestForm;
+import com.wm.requestDto.PeriodRevenueRetrieveRequestForm;
 import com.wm.service.StatisticsService;
 
 @RestController
@@ -18,8 +20,13 @@ public class StatisticsController {
 	@Autowired
 	private StatisticsService statisticsService;
 	
-	@RequestMapping("/revenue/retrieve")
-	public List<RevenueInfoEntity> revenueRetrieve(@RequestBody RevenueRetrieveRequestForm request) {
-		return statisticsService.revenueRetrieve(request);
+	@RequestMapping("/period-revenue/retrieve")
+	public List<PeriodRevenueInfoEntity> periodRevenueRetrieve(@RequestBody PeriodRevenueRetrieveRequestForm request) {
+		return statisticsService.periodRevenueRetrieve(request);
+	}
+	
+	@RequestMapping("/daily-revenue/retrieve")
+	public List<DailyRevenueInfoEntity> dailyRevenueRetrieve(@RequestBody DailyRevenueRetrieveRequestForm request) {
+		return statisticsService.dailyRevenueRetrieve(request);
 	}
 }

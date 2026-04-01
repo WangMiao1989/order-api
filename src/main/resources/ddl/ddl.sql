@@ -119,17 +119,25 @@ CREATE OR REPLACE VIEW v_dining_orders AS
      LEFT JOIN t_order_info toi ON ((ttsi.table_session_id = toi.table_session_id)))
   WHERE (ttsi.end_time IS NULL);
 
-create or replace view v_paid_order as
-SELECT 
+
+CREATE OR REPLACE VIEW v_table_order AS 
+select 
+    ttsi.table_session_id,
     ttsi.table_no,
+    ttsi.customer_cnt,
     ttsi.start_time,
     ttsi.end_time,
-    (jsonb_array_elements(toi.order_detail) ->> 'dishId'::text)::integer AS dish_id,
+    toi.order_id,
+    toi.create_time as order_time,
+    toi.is_paid,
+    toi.paid_time,
+    (jsonb_array_elements(toi.order_detail) ->> 'dishId'::text) AS dish_id,
     (jsonb_array_elements(toi.order_detail) ->> 'name'::text) AS name,
-    (jsonb_array_elements(toi.order_detail) ->> 'price'::text)::numeric AS price,
-    (jsonb_array_elements(toi.order_detail) ->> 'quantity'::text)::numeric AS quantity
+    (jsonb_array_elements(toi.order_detail) ->> 'price'::text) AS price,
+    (jsonb_array_elements(toi.order_detail) ->> 'quantity'::text) AS quantity,
+    (jsonb_array_elements(toi.order_detail) ->> 'isServed'::text) AS is_served,
+    (jsonb_array_elements(toi.order_detail) ->> 'servedTime'::text) AS served_time
 from 
     t_table_session_info ttsi
-    inner join t_order_info toi ON ttsi.table_session_id = toi.table_session_id and toi.is_paid = true;
-  
+    inner join t_order_info toi ON ttsi.table_session_id = toi.table_session_id;  
 

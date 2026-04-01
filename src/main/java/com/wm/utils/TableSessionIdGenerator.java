@@ -6,7 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class TableSessionIdGenerator {
 	// 时间格式：年月日时分秒毫秒
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyMMddHHmmssSSS");
 
     // 随机数位数
     private static final int RANDOM_NUM_DIGITS = 4;
