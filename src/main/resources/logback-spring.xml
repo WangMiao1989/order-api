@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 定义变量，方便统一管理 -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
+    <property name="LOG_PATH" value="/var/log/order-api" />
+
+    <!-- 1. 控制台输出配置 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 2. 文件输出配置 (包含滚动策略) -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 每天生成一个新日志文件 -->
+            <fileNamePattern>${LOG_PATH}/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 保留 30 天的历史日志 -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 3. 异步文件输出配置 (高性能) -->
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 引用刚刚定义的同步 FILE appender -->
+        <appender-ref ref="FILE" />
+        <!-- 队列大小，默认为 256 -->
+        <queueSize>512</queueSize>
+        <!-- 如果队列满，是否丢弃日志，默认为 false，即阻塞应用线程 -->
+        <discardingThreshold>0</discardingThreshold>
+    </appender>
+
+    <!-- 开发环境: 打印到控制台，MyBatis 日志级别为 DEBUG，会打印 SQL，但不打印结果集 -->
+    <springProfile name="dev">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </root>
+        <logger name="com.wm.mapper" level="DEBUG"/>
+    </springProfile>
+
+    <!-- 生产环境: 使用异步文件输出，仅打印必要的 INFO 日志 -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="ASYNC_FILE" />
+        </root>
+        <!-- 生产环境也可打印 SQL 便于排查，但建议设为 INFO 以关闭 -->
+        <!-- <logger name="com.wm.mapper" level="INFO"/> -->
+    </springProfile>
+</configuration>

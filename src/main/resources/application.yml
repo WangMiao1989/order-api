@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  profiles:
+    active: dev
+
   application:
     name: order-api
   
@@ -29,11 +32,6 @@ spring:
       mode: always
       continue-on-error: false
 
-# 日志配置
-logging:
-  level:
-    com.example.demo.mapper: DEBUG
-
 # MyBatis 配置
 mybatis:
   # mapper XML文件位置
@@ -43,7 +41,6 @@ mybatis:
   # 驼峰命名转换
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     cache-enabled: false
     lazy-loading-enabled: true
     aggressive-lazy-loading: false
