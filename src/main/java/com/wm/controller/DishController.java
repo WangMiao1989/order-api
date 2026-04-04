@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wm.entity.DishInfoEntity;
 import com.wm.requestDto.DishDeleteRequestForm;
+import com.wm.requestDto.DishDisplayUpdateRequestForm;
 import com.wm.requestDto.DishUpdateRequestForm;
 import com.wm.service.DishService;
 
@@ -32,5 +33,10 @@ public class DishController {
 	@RequestMapping("/delete")
 	public void dishDelete(@RequestBody DishDeleteRequestForm request) {
 		dishService.dishDelete(request);
+	}
+	
+	@RequestMapping("/display/update")
+	public void dishDisplayUpdate(@RequestBody DishDisplayUpdateRequestForm request) {
+		dishService.dishDisplayUpdate(request);
 	}
 }

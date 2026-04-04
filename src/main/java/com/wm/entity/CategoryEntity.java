@@ -9,4 +9,5 @@ public class CategoryEntity {
 	private String name;
 	private String description;
 	private String icon;
+	private Boolean displayFlag;
 }

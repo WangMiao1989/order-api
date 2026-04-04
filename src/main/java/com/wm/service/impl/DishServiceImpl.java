@@ -15,6 +15,7 @@ import com.wm.entity.DishInfoEntity;
 import com.wm.mapper.DiscountRepository;
 import com.wm.mapper.DishRepository;
 import com.wm.requestDto.DishDeleteRequestForm;
+import com.wm.requestDto.DishDisplayUpdateRequestForm;
 import com.wm.requestDto.DishUpdateRequestForm;
 import com.wm.service.DishService;
 
@@ -76,5 +77,10 @@ public class DishServiceImpl implements DishService{
 	public void dishDelete(DishDeleteRequestForm request) {
 		dishRepository.deleteDish(request.getDishId());
 		discountRepository.deleteDiscountByDishId(request.getDishId());
+	}
+	
+	// 菜品上下架更新
+	public void dishDisplayUpdate(DishDisplayUpdateRequestForm request) {
+		dishRepository.updateDishDisplay(request.getDishId(), request.getDisplayFlag());
 	}
 }

@@ -15,12 +15,13 @@
             , tda.rate
             , tda.start_date
             , tda.end_date
+            , md.display_flag 
         FROM
             #schema#.m_dish md
             left join #schema#.t_discount td on md.id = td.dish_id and now()::date between td.start_date and td.end_date
             left join #schema#.t_discount tda on md.id = tda.dish_id
         ORDER BY
-            md.id
+            md.display_flag desc, md.id
     </select>
     
     <insert id="insertDish" useGeneratedKeys="true" keyProperty="dishId" parameterType="com.wm.entity.DishEntity">
@@ -33,8 +34,11 @@
     		, #{price}
     		, #{image}
     		, #{tag}
-    		,#{displayOrder}
-    		, 'test', now(), 'test', now()
+    		, #{displayOrder}
+    		, #{createUser}
+	       	, #{createTime}
+	       	, #{updateUser}
+	       	, #{updateTime}
     	)
     </insert>
     
@@ -48,8 +52,8 @@
 	    		,image = #{image}
 	    		,tag = #{tag}
 	    		,display_order = #{displayOrder}
-	    		,update_user = 'test'
-	    		,update_time = now()
+	    		,update_user = #{updateUser}
+	    		,update_time = #{updateTime}
 	    where
 	    	id = #{dishId}
     </update>
@@ -57,4 +61,12 @@
     <delete id="deleteDish" parameterType="Long">
     	delete from #schema#.m_dish where id = #{dishId}
     </delete>
+    
+    <update id="updateDishDisplay" >
+    	update #schema#.m_dish
+    		set
+	    		display_flag = #{displayFlag}
+	    where
+	    	id = #{dishId}
+    </update>
 </mapper>

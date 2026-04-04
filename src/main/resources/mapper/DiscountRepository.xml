@@ -14,7 +14,7 @@
     	insert into #schema#.t_discount
     		(dish_id, rate, start_date, end_date, create_user, create_time, update_user, update_time)
     	values(
-    		#{dishId}, #{rate}, #{startDate}, #{endDate}, 'test', now(), 'test', now()
+    		#{dishId}, #{rate}, #{startDate}, #{endDate}, #{createUser}, #{createTime}, #{updateUser}, #{updateTime}
     	)
     </insert>
     
@@ -24,8 +24,8 @@
 	    		rate = #{rate}
 	    		,start_date = #{startDate}
 	    		,end_date = #{endDate}
-	    		,update_user = 'test'
-	    		,update_time = now()
+	    		,update_user = #{updateUser}
+	    		,update_time = #{updateTime}
 	    where
 	    	id = #{discountId}
     </update>

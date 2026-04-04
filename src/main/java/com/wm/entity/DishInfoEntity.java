@@ -19,4 +19,5 @@ public class DishInfoEntity {
 	private BigDecimal rate;
 	private LocalDate startDate;
 	private LocalDate endDate;
+	private Boolean displayFlag;
 }

@@ -8,9 +8,10 @@
             , name
             , description
             , icon
+            , display_flag
         FROM
             #schema#.m_category
         ORDER BY
-            id
+            display_flag desc, id
     </select>
 </mapper>

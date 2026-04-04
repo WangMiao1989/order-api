@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.wm.entity.DishInfoEntity;
 import com.wm.requestDto.DishDeleteRequestForm;
+import com.wm.requestDto.DishDisplayUpdateRequestForm;
 import com.wm.requestDto.DishUpdateRequestForm;
 
 public interface DishService {
@@ -12,4 +13,6 @@ public interface DishService {
 	public void dishUpdate(DishUpdateRequestForm request);
 	
 	public void dishDelete(DishDeleteRequestForm request);
+	
+	public void dishDisplayUpdate(DishDisplayUpdateRequestForm request);
 }

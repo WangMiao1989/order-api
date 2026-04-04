@@ -16,4 +16,6 @@ public interface DishRepository {
 	public int updateDish(DishEntity dish);
 	
 	public void deleteDish(Long dishId);
+	
+	public void updateDishDisplay(Long dishId, Boolean displayFlag);
 }
