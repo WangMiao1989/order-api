@@ -7,6 +7,12 @@ create table public.m_tenant(
     remark text
 );
 
+create table public.m_printer(
+    tenant_id varchar(20) primary key,
+    printer_name varchar(50),
+    printer_sn varchar(50)
+);
+
 -- create schema
 create schema jdj260101;
 set search_path to jdj260101;

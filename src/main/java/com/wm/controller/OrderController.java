@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wm.entity.UnservedOrderEntity;
 import com.wm.entity.OrderDetailEntity;
+import com.wm.entity.TableSessionEntity;
 import com.wm.requestDto.OrderCheckoutRequestForm;
 import com.wm.requestDto.OrderDishCancelRequestForm;
 import com.wm.requestDto.OrderDishRequestForm;
@@ -24,8 +25,8 @@ public class OrderController {
 	private OrderService orderService;
 	
 	@RequestMapping("/update")
-	public void updateOrder(@RequestBody OrderUpdateRequestForm request) {
-		orderService.orderInfoUpdate(request);
+	public TableSessionEntity updateOrder(@RequestBody OrderUpdateRequestForm request) {
+		return orderService.orderInfoUpdate(request);
 	}
 	
 	@RequestMapping("/retrieve")

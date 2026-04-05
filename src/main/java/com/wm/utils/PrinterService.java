@@ -30,7 +30,7 @@ import java.util.*;
 public class PrinterService {
 	
 	private final String APP_ID = "sp69cb8e8de03d3";
-	private final String SN = "1928978726";
+	//private final String SN = "1928978726";
 	private final String APP_SECRET = "1de5cf31ea9389cb42e581574a29c7a0";
 	private final String PRINTER_PRINT = "https://open.spyun.net/v1/printer/print";
 	private final String PRINTER_INFO = "https://open.spyun.net/v1/printer/info";
@@ -48,13 +48,13 @@ public class PrinterService {
      * 打印订单
      * @param content 打印内容（最大5000字节）
      */
-    public void printOrder(String content) {
+    public void printOrder(String content, String printerSn) {
         // 准备请求参数
         Map<String, Object> params = new HashMap<>();
         params.put("appid", APP_ID);
         params.put("timestamp", Instant.now().getEpochSecond()); // 10位unix时间戳
         params.put("content", content);
-        params.put("sn", SN);
+        params.put("sn", printerSn);
 
         // 发送请求
         String responseBody = doPost(PRINTER_PRINT, params);
@@ -73,12 +73,12 @@ public class PrinterService {
         }
     }
     
-    public String showPrinterInfo() {
+    public String showPrinterInfo(String printerSn) {
     	// 准备请求参数
         Map<String, Object> params = new HashMap<>();
         params.put("appid", APP_ID);
         params.put("timestamp", Instant.now().getEpochSecond()); // 10位unix时间戳
-        params.put("sn", SN);
+        params.put("sn", printerSn);
          
         // 发送请求
         return  doGet(PRINTER_INFO, params);

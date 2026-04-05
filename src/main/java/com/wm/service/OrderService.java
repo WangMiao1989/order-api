@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.wm.entity.UnservedOrderEntity;
 import com.wm.entity.OrderDetailEntity;
+import com.wm.entity.TableSessionEntity;
 import com.wm.requestDto.OrderCheckoutRequestForm;
 import com.wm.requestDto.OrderDishCancelRequestForm;
 import com.wm.requestDto.OrderDishRequestForm;
@@ -12,7 +13,7 @@ import com.wm.requestDto.TableNoRequestForm;
 
 public interface OrderService {
 	
-	public void orderInfoUpdate(OrderUpdateRequestForm orderForm);
+	public TableSessionEntity orderInfoUpdate(OrderUpdateRequestForm orderForm);
 	
 	public List<OrderDetailEntity> orderListRetrieve(TableNoRequestForm request);
 	

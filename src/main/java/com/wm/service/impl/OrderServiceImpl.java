@@ -39,7 +39,7 @@ public class OrderServiceImpl implements OrderService{
 	private SseController sseController;
 	
 	// order更新
-	public void orderInfoUpdate(OrderUpdateRequestForm request) {
+	public TableSessionEntity orderInfoUpdate(OrderUpdateRequestForm request) {
 		// table信息取得
 		TableSessionEntity tableInfo =  tableRepository.selectTableInfo(request.getTableNo());
 		// table信息不存在的情况，保存
@@ -62,6 +62,8 @@ public class OrderServiceImpl implements OrderService{
 		
 		// sse触发order更新
 		sseController.sendEmitter(ContextHolder.getTenantId(), "order-updated", "{\"type\":\"add\", \"data\":" +request.getOrderDetail() + "}");
+		
+		return tableInfo;
 	}
 	
 	// 桌全order取得

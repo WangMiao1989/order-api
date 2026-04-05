@@ -62,6 +62,6 @@
 		where
 		    to_char(start_time, 'YYYY-MM-DD') = #{searchDate}
 		order by 
-		    start_time 
+		    end_time  desc
     </select>
 </mapper>
