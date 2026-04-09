@@ -11,7 +11,7 @@ public class DishEntity extends BaseEntity{
 	private String description;
 	private Long categoryId;
 	private BigDecimal price;
-	private byte[] image;
+	private Long fileId;
 	private Long tag;
 	private String displayOrder;
 }

@@ -39,7 +39,7 @@ create table m_dish(
     description varchar(500),
     category_id bigint,
     price numeric,
-    image bytea,
+    file_id bigint,
     tag bigint,
     display_order integer,
     display_flag boolean default true,
@@ -47,6 +47,13 @@ create table m_dish(
     create_time timestamp without time zone default now(),
     update_user varchar(100),
     update_time timestamp without time zone default now()
+);
+
+create sequence file_id_seq;
+create table t_file(
+    file_id bigint primary key default nextval('file_id_seq'),
+    content bytea,
+    content_type varchar(50)
 );
 
 create sequence discount_id_seq;

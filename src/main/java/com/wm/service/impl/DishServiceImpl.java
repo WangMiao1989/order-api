@@ -14,9 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wm.entity.DiscountEntity;
 import com.wm.entity.DishEntity;
 import com.wm.entity.DishInfoEntity;
+import com.wm.entity.FileEntity;
 import com.wm.exception.SystemException;
 import com.wm.mapper.DiscountRepository;
 import com.wm.mapper.DishRepository;
+import com.wm.mapper.FileRepository;
 import com.wm.requestDto.DishDeleteRequestForm;
 import com.wm.requestDto.DishDisplayUpdateRequestForm;
 import com.wm.requestDto.DishUpdateRequestForm;
@@ -32,6 +34,9 @@ public class DishServiceImpl implements DishService{
 	private DishRepository dishRepository;
 	
 	@Autowired
+	private FileRepository fileRepository;
+	
+	@Autowired
 	private DiscountRepository discountRepository;
 	
 	// 菜品取得
@@ -45,11 +50,20 @@ public class DishServiceImpl implements DishService{
 		DishEntity dish = new DishEntity();
 		BeanUtils.copyProperties(request, dish);
 		
-		// 图片处理
-		//byte[] image = Base64.getDecoder().decode(request.getImage());
-		byte[] image =compressBase64Image(request.getImage(), 500);
-		dish.setImage(image);
-		
+		// 图片存在的情况场合
+		if(!Objects.isNull(request.getImage())) {
+			FileEntity file = new FileEntity();
+			// 图片处理
+			String imageStr = request.getImage().replaceFirst("^data:image/[a-zA-Z]+;base64,", "");
+			byte[] image =compressBase64Image(imageStr, 500);
+			file.setContent(image);
+			file.setContentType("image/webp");
+			if(!Objects.isNull(request.getFileId())) {
+				fileRepository.deleteFile(request.getFileId());
+			}
+			fileRepository.insertFile(file);
+			dish.setFileId(file.getFileId());
+		}
 		
 		// 菜品保存
 		if(Objects.isNull(dish.getDishId())) {
@@ -82,6 +96,9 @@ public class DishServiceImpl implements DishService{
 	
 	// 菜品删除
 	public void dishDelete(DishDeleteRequestForm request) {
+		if(!Objects.isNull(request.getFileId())) {
+			fileRepository.deleteFile(request.getFileId());
+		}
 		dishRepository.deleteDish(request.getDishId());
 		discountRepository.deleteDiscountByDishId(request.getDishId());
 	}
@@ -99,7 +116,7 @@ public class DishServiceImpl implements DishService{
 	    	Thumbnails.of(bis)
 	            .size(maxSize, maxSize)
 	            .outputQuality(0.7)
-	            .outputFormat("jpg")
+	            .outputFormat("webp")
 	            .toOutputStream(baos);
 	    	return baos.toByteArray();
 	    } catch(Exception e) {

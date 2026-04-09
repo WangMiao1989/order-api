@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import com.wm.config.AuthWhitelistProperties;
+import com.wm.config.WhitelistProperties;
 import com.wm.entity.UserInfoEntity;
 import com.wm.exception.AuthenticationException;
 import com.wm.mapper.UserRepository;
@@ -19,9 +19,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class AuthFilter implements Filter {
 
 	private final  UserRepository userRepository;
-    private final  AuthWhitelistProperties whitelistProperties;
+    private final  WhitelistProperties whitelistProperties;
     
-    public AuthFilter(UserRepository userRepository, AuthWhitelistProperties whitelistProperties ) {
+    public AuthFilter(UserRepository userRepository, WhitelistProperties whitelistProperties ) {
     	this.userRepository = userRepository;
     	this.whitelistProperties = whitelistProperties;
     }
@@ -35,7 +35,7 @@ public class AuthFilter implements Filter {
         UserInfoEntity userInfo = new UserInfoEntity();
         
         // 白名单判定
-        boolean isWhitelisted = whitelistProperties.getWhitelist().stream().anyMatch(url -> url.equals(req.getRequestURI()));
+        boolean isWhitelisted = whitelistProperties.getWhitelists().get("auth").stream().anyMatch(url -> url.equals(req.getRequestURI()));
         // 如果url不在白名单 或 token不为空的场合，需要认证
         // token不为空的：管理端调用的共同api，因为token被设定，所以验证token有效性
         if (!isWhitelisted || !Objects.isNull(token)) {

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wm.mapper.FileRepository">
+    <select id="selectContentById" resultType="com.wm.entity.FileEntity">
+    	select
+    		file_id
+    		,content
+    		,content_type
+    	from
+    		#schema#.t_file
+    	where
+    		file_id = #{fileId}
+    </select>
+    
+    <insert id="insertFile" useGeneratedKeys="true" keyProperty="fileId" parameterType="com.wm.entity.FileEntity">
+    	insert into #schema#.t_file
+    	(content, content_type)
+    	values
+    	(#{content}, #{contentType})
+    </insert>
+    
+    <delete id="deleteFile" parameterType="Long">
+    	delete from #schema#.t_file where file_id = #{fileId}
+    </delete>
+</mapper>

@@ -9,7 +9,7 @@
             , category_id
             , price
             , price * coalesce(td.rate, 1) as current_price
-            , image
+            , file_id
             , tag
             , case when tda.id is null then false else true end has_discount
             , tda.rate
@@ -26,13 +26,13 @@
     
     <insert id="insertDish" useGeneratedKeys="true" keyProperty="dishId" parameterType="com.wm.entity.DishEntity">
     	insert into #schema#.m_dish
-    		(name, description, category_id, price, image, tag, display_order, create_user, create_time, update_user, update_time)
+    		(name, description, category_id, price, file_id, tag, display_order, create_user, create_time, update_user, update_time)
     	values(
     		#{name}
     		, #{description}
     		, #{categoryId}
     		, #{price}
-    		, #{image}
+    		, #{fileId}
     		, #{tag}
     		, #{displayOrder}
     		, #{createUser}
@@ -49,7 +49,7 @@
 	    		,description = #{description}
 	    		,category_id = #{categoryId}
 	    		,price = #{price}
-	    		,image = #{image}
+	    		,file_id = #{fileId}
 	    		,tag = #{tag}
 	    		,display_order = #{displayOrder}
 	    		,update_user = #{updateUser}

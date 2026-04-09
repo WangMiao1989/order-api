@@ -21,7 +21,7 @@ public class FilterConfig {
 	@Autowired
 	private TenantRepository tenantRepository;
 	@Autowired
-	private AuthWhitelistProperties authWhitelistProperties;
+	private WhitelistProperties whitelistProperties;
 	@Autowired
     private ObjectMapper objectMapper;
 
@@ -65,7 +65,7 @@ public class FilterConfig {
     public FilterRegistrationBean<TenantFilter> tenantFilter() {
         FilterRegistrationBean<TenantFilter> registrationBean = new FilterRegistrationBean<>();
         
-        registrationBean.setFilter(new TenantFilter(tenantRepository));
+        registrationBean.setFilter(new TenantFilter(tenantRepository, whitelistProperties));
         registrationBean.addUrlPatterns("/*"); 
         registrationBean.setName("TenantFilter");
         registrationBean.setOrder(4); 
@@ -77,7 +77,7 @@ public class FilterConfig {
     public FilterRegistrationBean<AuthFilter> authFilter() {
         FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
         
-        registrationBean.setFilter(new AuthFilter(userRepository, authWhitelistProperties));
+        registrationBean.setFilter(new AuthFilter(userRepository, whitelistProperties));
         registrationBean.addUrlPatterns("/*"); 
         registrationBean.setName("AuthFilter");
         registrationBean.setOrder(5); 

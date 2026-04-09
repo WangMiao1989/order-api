@@ -45,15 +45,18 @@ mybatis:
     lazy-loading-enabled: true
     aggressive-lazy-loading: false
 
-auth:
-  # token认证白名单
-  whitelist:
-    - /tenant/retrieve
-    - /dish/retrieve
-    - /category/retrieve
-    - /table/retrieve
-    - /table/customer/checkout
-    - /order/retrieve
-    - /order/update
-    - /admin/user/login
-    - /sse/connect
+#白名单
+whitelist:
+  whitelists:
+    tenant: []
+    auth:
+      - /tenant/retrieve
+      - /dish/retrieve
+      - /category/retrieve
+      - /table/retrieve
+      - /table/customer/checkout
+      - /order/retrieve
+      - /order/update
+      - /admin/user/login
+      - /sse/connect
+      - /file/image

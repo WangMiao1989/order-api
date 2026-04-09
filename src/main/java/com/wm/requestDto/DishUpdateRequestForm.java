@@ -12,6 +12,7 @@ public class DishUpdateRequestForm {
 	private Long categoryId;
 	private String description;
 	private BigDecimal price;
+	private Long fileId;
 	private String image;
 	private Long tag;
 	private Boolean hasDiscount;

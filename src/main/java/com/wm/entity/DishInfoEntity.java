@@ -13,7 +13,7 @@ public class DishInfoEntity {
 	private String description;
 	private BigDecimal price;
 	private BigDecimal currentPrice;
-	private byte[] image;
+	private Long fileId;
 	private Long tag;
 	private Boolean hasDiscount;
 	private BigDecimal rate;
