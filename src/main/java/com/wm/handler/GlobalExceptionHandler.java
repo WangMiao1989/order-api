@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import com.wm.constant.CommonCode;
 import com.wm.exception.AuthenticationException;
 import com.wm.exception.BusinessException;
+import com.wm.exception.IdempotentException;
 import com.wm.exception.SystemException;
 import com.wm.response.GlobalResponse;
 
@@ -28,15 +29,24 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthenticationException.class)
     public GlobalResponse<Void> handleSystemErrorException(AuthenticationException e){
-        log.error("系统异常: {}", e.getMessage(), e);
+        log.error("认证异常: {}", e.getMessage(), e);
         return GlobalResponse.globalError(CommonCode.RESPONSE_UNAUTHORIZED, null, e.getMessage());
+    }
+	
+	// 幂等性error
+	@ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(IdempotentException.class)
+    public GlobalResponse<Void> handleSystemErrorException(IdempotentException e){
+        log.error("幂等性异常: {}", e.getMessage(), e);
+        return GlobalResponse.globalError(CommonCode.RESPONSE_CONFLICT, null, "幂等性异常");
     }
     
      // 处理所有其他异常
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SystemException.class)
     public GlobalResponse<Void> handleException(SystemException e){
-        return GlobalResponse.globalError(CommonCode.RESPONSE_SYSTEM_ERROR, null, "系统异常！");
+		log.error("系统异常: {}", e.getMessage(), e);
+        return GlobalResponse.globalError(CommonCode.RESPONSE_SYSTEM_ERROR, null, "系统异常");
     }
     
     // 处理所有其他异常
@@ -44,6 +54,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public GlobalResponse<Void> handleException(Exception e){
         log.error("系统异常: {}", e.getMessage(), e);
-        return GlobalResponse.globalError(CommonCode.RESPONSE_SYSTEM_ERROR, null, "系统异常！");
+        return GlobalResponse.globalError(CommonCode.RESPONSE_SYSTEM_ERROR, null, "系统异常");
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wm.entity.UnservedOrderEntity;
+import com.wm.annotation.Idempotent;
 import com.wm.entity.OrderDetailEntity;
 import com.wm.entity.TableSessionEntity;
 import com.wm.requestDto.OrderCheckoutRequestForm;
@@ -24,6 +25,7 @@ public class OrderController {
 	@Autowired
 	private OrderService orderService;
 	
+	@Idempotent
 	@RequestMapping("/update")
 	public TableSessionEntity updateOrder(@RequestBody OrderUpdateRequestForm request) {
 		return orderService.orderInfoUpdate(request);

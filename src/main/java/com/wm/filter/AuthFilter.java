@@ -31,14 +31,19 @@ public class AuthFilter implements Filter {
             throws IOException, ServletException {
         
         HttpServletRequest req = (HttpServletRequest) request;
-        String token = req.getHeader("Authorization");
-        UserInfoEntity userInfo = new UserInfoEntity();
-        
         // 白名单判定
         boolean isWhitelisted = whitelistProperties.getWhitelists().get("auth").stream().anyMatch(url -> url.equals(req.getRequestURI()));
-        // 如果url不在白名单 或 token不为空的场合，需要认证
-        // token不为空的：管理端调用的共同api，因为token被设定，所以验证token有效性
-        if (!isWhitelisted || !Objects.isNull(token)) {
+        if( isWhitelisted) {
+        	// 白名单的场合，继续执行
+        	chain.doFilter(request, response);
+        	return;
+        }
+        
+        boolean authRequired = Boolean.parseBoolean(req.getHeader("X-Auth-Required"));
+        UserInfoEntity userInfo = new UserInfoEntity();
+        if(authRequired) {
+        	// 管理端调用
+        	String token = req.getHeader("Authorization");
         	// 真正token取得
             if (!Objects.isNull(token) && token.startsWith("Bearer ")) {
                 token = token.substring(7);
@@ -61,9 +66,8 @@ public class AuthFilter implements Filter {
             if (LocalDateTime.now().isAfter(userInfo.getExpiresTime())) {
             	throw new AuthenticationException("登录信息过期，请重新登录。");
             }
-        	
         } else {
-        	// 在白名单并且token为空的场合 ===> 顾客端调用
+        	// 顾客端调用
         	userInfo.setUserId("customer");
         	userInfo.setUserName("顾客");
         }
