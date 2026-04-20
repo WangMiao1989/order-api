@@ -3,8 +3,10 @@ package com.wm.entity;
 import java.math.BigDecimal;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class DishEntity extends BaseEntity{
 	private Long dishId;
 	private String name;

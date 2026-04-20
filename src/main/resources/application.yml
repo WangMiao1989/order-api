@@ -22,23 +22,6 @@ spring:
       password: redis1234
       database: 0
 
-  # JPA 配置
-  jpa:
-    hibernate:
-      ddl-auto: update  # 开发环境用 update，生产环境用 validate
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    database: postgresql
-    
-  # 数据库初始化
-  sql:
-    init:
-      mode: always
-      continue-on-error: false
-
 # MyBatis 配置
 mybatis:
   # mapper XML文件位置
