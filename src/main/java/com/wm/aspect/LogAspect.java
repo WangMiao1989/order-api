@@ -31,7 +31,7 @@ public class LogAspect {
             Object result = joinPoint.proceed();
             long cost = System.currentTimeMillis() - start;
             // 只记录耗时，不记录返回值内容
-            log.info("【END】{}.{} cost时: {}ms", className, methodName, cost);
+            log.info("【END】{}.{} cost: {}ms", className, methodName, cost);
             return result;
         } catch (Exception e) {
             long cost = System.currentTimeMillis() - start;
