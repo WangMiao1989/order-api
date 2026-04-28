@@ -66,4 +66,26 @@
     	where
     		table_no = #{tableNo}
     </update>
+    
+    <select id="isBusy" resultType="boolean">
+    	select 
+    		exists( 
+    			select 
+    				1 
+    			from
+    				#schema#.t_table_session_info 
+    			where 
+    				end_time is null 
+    				and table_no = #{tableNo}
+    		)
+    </select>
+    
+    <update id="tableChange">
+    	update #schema#.t_table_session_info 
+    	set
+    		table_no = #{changeTableNo}
+    	where
+    		table_no = #{curTableNo}
+    	and end_time is null
+    </update>
 </mapper>

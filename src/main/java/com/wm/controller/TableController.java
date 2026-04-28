@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wm.entity.AllTableEntity;
+import com.wm.requestDto.TableChangeRequestForm;
 import com.wm.requestDto.TableNoRequestForm;
 import com.wm.responseDto.TableDetailRetrieveResponse;
 import com.wm.service.TableService;
@@ -41,5 +42,11 @@ public class TableController {
 	@RequestMapping("customer/checkout")
 	public void customerCheckout(@RequestBody TableNoRequestForm request) {
 		sseController.sendEmitter(ContextHolder.getTenantId(), "checkout", request.getTableNo() + "桌结账");
+	}
+	
+	@RequestMapping("/change")
+	public void tableChange(@RequestBody TableChangeRequestForm request) {
+		tableService.tableChange(request);
+		sseController.sendEmitter(ContextHolder.getTenantId(), "order-updated", "");
 	}
 }

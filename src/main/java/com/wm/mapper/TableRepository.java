@@ -16,4 +16,8 @@ public interface TableRepository {
 	public List<AllTableEntity> selectAllTable();
 	
 	public int updateTableEndtime(String tableNo);
+	
+	public boolean isBusy(String tableNo);
+	
+	public void tableChange(String curTableNo, String changeTableNo);
 }

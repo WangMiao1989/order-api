@@ -10,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wm.entity.TableSessionEntity;
 import com.wm.entity.TenantEntity;
+import com.wm.exception.BusinessException;
 import com.wm.entity.AllTableEntity;
 import com.wm.mapper.TableRepository;
+import com.wm.requestDto.TableChangeRequestForm;
 import com.wm.requestDto.TableNoRequestForm;
 import com.wm.responseDto.TableDetailRetrieveResponse;
 import com.wm.service.TableService;
@@ -43,11 +45,28 @@ public class TableServiceImpl implements TableService{
 		return response;
 	}
 	
+	// 全部桌台信息取得
 	public List<AllTableEntity> allTableRetrieve(){
 		return tableRepository.selectAllTable();
 	}
 	
+	// 结束订单
 	public void tableFinish(TableNoRequestForm request) {
 		tableRepository.updateTableEndtime(request.getTableNo());
+	}
+	
+	// 换桌
+	public void tableChange(TableChangeRequestForm request) {
+		// 如果当前桌位空桌的情况，抛业务异常
+		if(!tableRepository.isBusy(request.getCurTableNo())) {
+			throw new BusinessException("E01", "当前桌台为空桌，无需更换");
+		}
+		
+		// 如果变更后桌不为空桌的情况，抛业务异常
+		if(tableRepository.isBusy(request.getChangeTableNo())) {
+			throw new BusinessException("E02", "变更后的桌台已经被使用，无法换桌");
+		}
+		
+		tableRepository.tableChange(request.getCurTableNo(), request.getChangeTableNo());
 	}
 }
