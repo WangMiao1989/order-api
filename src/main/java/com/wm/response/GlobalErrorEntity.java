@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CommonErrorEntity {
+public class GlobalErrorEntity {
 	private String code;
 	private String message;
 }

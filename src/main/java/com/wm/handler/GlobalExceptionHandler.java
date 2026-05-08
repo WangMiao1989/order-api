@@ -4,6 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.Objects;
+
 import org.springframework.http.HttpStatus;
 
 import com.wm.constant.CommonCode;
@@ -21,8 +24,12 @@ public class GlobalExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BusinessException.class)
     public GlobalResponse<Void> handleBusinessException(BusinessException e) {
-        log.error("业务异常: code={}, message={}", e.getCode(), e.getMessage());
-        return GlobalResponse.globalError(CommonCode.RESPONSE_BUSSINESS_ERROR, e.getCode(), e.getMessage());
+        if(Objects.isNull(e.getError())) {
+        	return GlobalResponse.globalError(CommonCode.RESPONSE_BUSSINESS_ERROR, e.getCode(), e.getMessage());
+        } else {
+        	return GlobalResponse.fieldError(CommonCode.RESPONSE_BUSSINESS_ERROR, e.getError());
+        }
+        
     }
     
     // 认证异常

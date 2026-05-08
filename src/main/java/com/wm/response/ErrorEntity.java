@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 public class ErrorEntity {
-	private CommonErrorEntity globalError;
-	private List<CommonErrorEntity> fieldsError;
+	private GlobalErrorEntity globalError;
+	private List<FieldErrorEntity> fieldsError;
 }
